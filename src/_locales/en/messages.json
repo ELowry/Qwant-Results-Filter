@@ -1,0 +1,358 @@
+{
+	"extensionName": {
+		"message": "Qwant Results Filter",
+		"description": "The name of the extension."
+	},
+	"extensionDescription": {
+		"message": "Declutter your Qwant search results to find what you're actually looking for.",
+		"description": "The description shown in the browser extension manager."
+	},
+	"actionTitle": {
+		"message": "Qwant Results Filter",
+		"description": "The tooltip for the toolbar action icon."
+	},
+	"optionsPageTitle": {
+		"message": "Qwant Filter Settings",
+		"description": "The title of the options page."
+	},
+	"optionsRevealLabel": {
+		"message": "Show Filtered Results (dimmed)",
+		"description": "Label for the reveal mode toggle switch."
+	},
+	"optionsCommunityFiltersHeader": {
+		"message": "Community Filter Lists",
+		"description": "Heading for the community filter lists section."
+	},
+	"optionsCommunityFiltersIntro": {
+		"message": "You can select from a curated list of filters:",
+		"description": "Introductory text for recommended community lists."
+	},
+	"optionsCommunityFiltersImportantNotice": {
+		"message": "IMPORTANT: these lists are independently created and maintained by individual users. They were pulled directly from the $LINK_START$uBlacklist website$LINK_END$.",
+		"description": "Notice stating that filter lists are third-party creations.",
+		"placeholders": {
+			"link_start": {
+				"content": "<a href=\"https://ublacklist.github.io/rulesets\" target=\"_blank\" rel=\"noopener noreferrer\">"
+			},
+			"link_end": {
+				"content": "</a>"
+			}
+		}
+	},
+	"optionsShowRecommendedLists": {
+		"message": "Show Recommended Lists",
+		"description": "Button label to show recommended lists."
+	},
+	"optionsHideRecommendedLists": {
+		"message": "Hide Recommended Lists",
+		"description": "Button label to hide recommended lists."
+	},
+	"optionsPresetsCountEnabled": {
+		"message": "$BASE_TEXT$ ($COUNT$ enabled)",
+		"description": "Button label displaying how many recommended lists are currently enabled.",
+		"placeholders": {
+			"base_text": {
+				"content": "$1",
+				"example": "Show Recommended Lists"
+			},
+			"count": {
+				"content": "$2",
+				"example": "3"
+			}
+		}
+	},
+	"optionsDirectLinkIntro": {
+		"message": "Or you can provide a direct link to any list that follow the $LINK_START$uBlacklist format$LINK_END$.",
+		"description": "Introductory text for providing a custom filter list URL.",
+		"placeholders": {
+			"link_start": {
+				"content": "<a href=\"https://github.com/iorate/ublacklist\" target=\"_blank\" rel=\"noopener noreferrer\">"
+			},
+			"link_end": {
+				"content": "</a>"
+			}
+		}
+	},
+	"optionsListUrlPlaceholder": {
+		"message": "https://raw.githubusercontent.com/.../list.txt",
+		"description": "Placeholder for the custom filter list input field."
+	},
+	"optionsAddListButton": {
+		"message": "Add List",
+		"description": "Button text to submit and add a filter list."
+	},
+	"optionsBlockedDomainsHeader": {
+		"message": "Manually Blocked Domains",
+		"description": "Heading for the manually blocked domains section."
+	},
+	"optionsDomainInputPlaceholder": {
+		"message": "example.com",
+		"description": "Placeholder for domain input field."
+	},
+	"optionsDomainPatternTitle": {
+		"message": "Please enter a valid domain (e.g., example.com)",
+		"description": "Validation tooltip for domain input fields."
+	},
+	"optionsBlockDomainButton": {
+		"message": "Block Domain",
+		"description": "Button text to block a domain manually."
+	},
+	"optionsWhitelistedDomainsHeader": {
+		"message": "Whitelisted Domains",
+		"description": "Heading for the whitelisted domains section."
+	},
+	"optionsWhitelistDomainButton": {
+		"message": "Whitelist Domain",
+		"description": "Button text to whitelist a domain."
+	},
+	"optionsImportExportHeader": {
+		"message": "Import/Export Settings",
+		"description": "Heading for the import and export section."
+	},
+	"optionsImportExportDescription": {
+		"message": "Export your current settings to a file, or import an existing backup.",
+		"description": "Description of import and export functionality."
+	},
+	"optionsExportSettingsButton": {
+		"message": "Export Settings",
+		"description": "Button text to export settings."
+	},
+	"optionsImportSettingsButton": {
+		"message": "Import Settings",
+		"description": "Button text to import settings."
+	},
+	"optionsRemoveListAriaLabel": {
+		"message": "Remove List",
+		"description": "Accessibility label and tooltip for the remove list button."
+	},
+	"optionsRemoveDomainAriaLabel": {
+		"message": "Remove Domain",
+		"description": "Accessibility label and tooltip for the remove domain button."
+	},
+	"optionsNoDomainsBlocked": {
+		"message": "No domains are currently blocked.",
+		"description": "Message displayed when the blocked domain list is empty."
+	},
+	"optionsNoDomainsWhitelisted": {
+		"message": "No domains are currently whitelisted.",
+		"description": "Message displayed when the whitelisted domain list is empty."
+	},
+	"optionsNoCustomLists": {
+		"message": "No custom lists added yet.",
+		"description": "Message displayed when no custom filter lists have been added."
+	},
+	"buttonAdding": {
+		"message": "Adding...",
+		"description": "Button text when a list is being added."
+	},
+	"buttonFetching": {
+		"message": "Fetching...",
+		"description": "Button text when a list is being fetched from a remote URL."
+	},
+	"presetLearnMore": {
+		"message": "Learn more",
+		"description": "Link text to learn more about a recommended preset list."
+	},
+	"categorySecurity": {
+		"message": "Security",
+		"description": "Category heading for security-related filter lists."
+	},
+	"categorySpam": {
+		"message": "Spam",
+		"description": "Category heading for spam-related filter lists."
+	},
+	"categorySpecificSites": {
+		"message": "Specific Sites",
+		"description": "Category heading for specific-site filter lists."
+	},
+	"categoryChinese": {
+		"message": "Chinese",
+		"description": "Category heading for Chinese filter lists."
+	},
+	"categoryItalian": {
+		"message": "Italian",
+		"description": "Category heading for Italian filter lists."
+	},
+	"categoryJapanese": {
+		"message": "Japanese",
+		"description": "Category heading for Japanese filter lists."
+	},
+	"categoryPortuguese": {
+		"message": "Portuguese",
+		"description": "Category heading for Portuguese filter lists."
+	},
+	"categoryAiGeneratedContent": {
+		"message": "Ai Generated Content",
+		"description": "Category heading for AI generated content filter lists."
+	},
+	"categoryCopycatSites": {
+		"message": "Copycat Sites",
+		"description": "Category heading for copycat site filter lists."
+	},
+	"categoryGaming": {
+		"message": "Gaming",
+		"description": "Category heading for gaming-related filter lists."
+	},
+	"categoryMediaSites": {
+		"message": "Media Sites",
+		"description": "Category heading for media and news filter lists."
+	},
+	"toastCustomListRemoved": {
+		"message": "Custom list removed successfully!",
+		"description": "Toast message displayed after removing a custom filter list."
+	},
+	"toastListAddedFromPresets": {
+		"message": "List added from recommended presets!",
+		"description": "Toast message displayed when a list is added matching a recommended preset."
+	},
+	"toastListAlreadyActive": {
+		"message": "This recommended list is already active!",
+		"description": "Toast message displayed when a recommended list is already enabled."
+	},
+	"toastCustomListAdded": {
+		"message": "Custom filter list added successfully!",
+		"description": "Toast message displayed after adding a custom filter list."
+	},
+	"toastDomainAddedSingle": {
+		"message": "Domain $DOMAIN$ added successfully!",
+		"description": "Toast message displayed after adding a single domain.",
+		"placeholders": {
+			"domain": {
+				"content": "$1",
+				"example": "example.com"
+			}
+		}
+	},
+	"toastDomainAddedMultiple": {
+		"message": "Added $COUNT$ domains successfully!",
+		"description": "Toast message displayed after adding multiple domains.",
+		"placeholders": {
+			"count": {
+				"content": "$1",
+				"example": "5"
+			}
+		}
+	},
+	"toastDomainsAlreadyInList": {
+		"message": "All provided domains are already in the list.",
+		"description": "Toast message displayed when all entered domains are already present in the list."
+	},
+	"toastListAdded": {
+		"message": "List added successfully!",
+		"description": "Toast message displayed after toggling on a preset list."
+	},
+	"toastListRemoved": {
+		"message": "List removed successfully!",
+		"description": "Toast message displayed after toggling off a preset list."
+	},
+	"toastSettingsExported": {
+		"message": "Settings exported successfully!",
+		"description": "Toast message displayed after settings are exported."
+	},
+	"toastNoValidSettings": {
+		"message": "No valid settings found in the file.",
+		"description": "Toast message displayed when imported file contains no recognized settings."
+	},
+	"toastSettingsImported": {
+		"message": "Settings imported successfully!",
+		"description": "Toast message displayed after settings are imported successfully."
+	},
+	"toastImportParseError": {
+		"message": "Failed to parse the imported file.",
+		"description": "Toast message displayed when the imported JSON file is malformed."
+	},
+	"toastListFetchError": {
+		"message": "Failed to load list. Please check the URL or try again later.",
+		"description": "Toast message displayed when fetching an external filter list fails."
+	},
+	"confirmModalTitleDefault": {
+		"message": "Confirm",
+		"description": "Default title for confirmation dialog."
+	},
+	"confirmBlockDomainTitle": {
+		"message": "Block Domain",
+		"description": "Title of confirmation dialog when blocking a domain."
+	},
+	"confirmBlockDomainMessage": {
+		"message": "Hide all search results from $DOMAIN$?",
+		"description": "Confirmation message when blocking a domain.",
+		"placeholders": {
+			"domain": {
+				"content": "$1",
+				"example": "example.com"
+			}
+		}
+	},
+	"confirmUnblockDomainTitle": {
+		"message": "Unblock Domain",
+		"description": "Title of confirmation dialog when unblocking a domain."
+	},
+	"confirmUnblockDomainMessage": {
+		"message": "Restore search results from $DOMAIN$?",
+		"description": "Confirmation message when unblocking a domain.",
+		"placeholders": {
+			"domain": {
+				"content": "$1",
+				"example": "example.com"
+			}
+		}
+	},
+	"confirmCancelButton": {
+		"message": "Cancel",
+		"description": "Button label to cancel the confirmation dialog."
+	},
+	"confirmSubmitButton": {
+		"message": "Confirm",
+		"description": "Button label to submit the confirmation dialog."
+	},
+	"quickSettingsTitle": {
+		"message": "Results Filter Quick Settings",
+		"description": "Header title of the quick settings modal."
+	},
+	"modalCloseAriaLabel": {
+		"message": "Close",
+		"description": "Accessibility label for closing dialogs."
+	},
+	"quickSettingsBlockedHeader": {
+		"message": "Blocked on this page:",
+		"description": "Header text for list of blocked domains in quick settings."
+	},
+	"quickSettingsNoBlockedDomains": {
+		"message": "No domains are blocked on this page. ✨🧹",
+		"description": "Message shown when no domains are blocked on the current search results page."
+	},
+	"quickSettingsOpenOptions": {
+		"message": "Open Settings",
+		"description": "Button text in quick settings modal to open full options page."
+	},
+	"unblockDomainAriaLabel": {
+		"message": "Unblock domain",
+		"description": "Accessibility label and tooltip for unblocking a domain button."
+	},
+	"counterWaiting": {
+		"message": "Waiting for search results...",
+		"description": "Tooltip for counter button while search results are loading."
+	},
+	"counterResultSingle": {
+		"message": "1 filtered result on this page. Click for details.",
+		"description": "Tooltip for counter button when 1 result is filtered."
+	},
+	"counterResultMultiple": {
+		"message": "$COUNT$ filtered results on this page. Click for details.",
+		"description": "Tooltip for counter button when multiple results are filtered.",
+		"placeholders": {
+			"count": {
+				"content": "$1",
+				"example": "3"
+			}
+		}
+	},
+	"actionBlock": {
+		"message": "Block",
+		"description": "Button text to block a domain directly from a search result."
+	},
+	"actionUnblock": {
+		"message": "Unblock",
+		"description": "Button text to unblock a domain directly from a search result."
+	}
+}

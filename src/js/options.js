@@ -1,6 +1,7 @@
 import { RECOMMENDED_LISTS } from './modules/presets.js';
 import { ListParser } from './modules/utils/parser.js';
 import { UrlUtils } from './modules/utils/url.js';
+import { I18n } from './modules/i18n.js';
 
 /**
  * Controller for the options page interface.
@@ -58,6 +59,8 @@ class OptionsController {
 	 * @returns {Promise<void>} Resolves when initialization is complete.
 	 */
 	async init() {
+		I18n.translateDom(document);
+
 		this.#setupEventListeners();
 		this.#setupStorageListeners();
 
@@ -72,13 +75,13 @@ class OptionsController {
 		this.#renderDomainList(
 			syncData.blockedDomains,
 			this.#domainListElement,
-			'No domains are currently blocked.',
+			I18n.getMessage('optionsNoDomainsBlocked'),
 			'blockedDomains'
 		);
 		this.#renderDomainList(
 			syncData.whitelistedDomains,
 			this.#whitelistListElement,
-			'No domains are currently whitelisted.',
+			I18n.getMessage('optionsNoDomainsWhitelisted'),
 			'whitelistedDomains'
 		);
 		await this.#renderFilterLists(syncData.filterLists);
@@ -155,7 +158,7 @@ class OptionsController {
 					this.#renderDomainList(
 						changes.blockedDomains.newValue,
 						this.#domainListElement,
-						'No domains are currently blocked.',
+						I18n.getMessage('optionsNoDomainsBlocked'),
 						'blockedDomains'
 					);
 				}
@@ -164,7 +167,7 @@ class OptionsController {
 					this.#renderDomainList(
 						changes.whitelistedDomains.newValue,
 						this.#whitelistListElement,
-						'No domains are currently whitelisted.',
+						I18n.getMessage('optionsNoDomainsWhitelisted'),
 						'whitelistedDomains'
 					);
 				}
@@ -223,14 +226,14 @@ class OptionsController {
 			const isAlreadyActive = syncData.filterLists.find((l) => l.url === matchedPresetUrl);
 
 			if (!isAlreadyActive) {
-				this.#addListButton.textContent = 'Adding...';
+				this.#addListButton.textContent = I18n.getMessage('buttonAdding');
 				this.#addListButton.disabled = true;
 				await this.#addFilterList(matchedPresetUrl);
-				this.#addListButton.textContent = 'Add List';
+				this.#addListButton.textContent = I18n.getMessage('optionsAddListButton');
 				this.#addListButton.disabled = false;
-				this.#showToast('List added from recommended presets!');
+				this.#showToast(I18n.getMessage('toastListAddedFromPresets'));
 			} else {
-				this.#showToast('This recommended list is already active!');
+				this.#showToast(I18n.getMessage('toastListAlreadyActive'));
 			}
 
 			const isHidden = this.#presetsContainer.hasAttribute('hidden');
@@ -263,17 +266,17 @@ class OptionsController {
 			return;
 		}
 
-		this.#addListButton.textContent = 'Fetching...';
+		this.#addListButton.textContent = I18n.getMessage('buttonFetching');
 		this.#addListButton.disabled = true;
 
 		const success = await this.#addFilterList(normalizedInputUrl);
 
-		this.#addListButton.textContent = 'Add List';
+		this.#addListButton.textContent = I18n.getMessage('optionsAddListButton');
 		this.#addListButton.disabled = false;
 
 		if (success) {
 			this.#urlInput.value = '';
-			this.#showToast('Custom filter list added successfully!');
+			this.#showToast(I18n.getMessage('toastCustomListAdded'));
 		}
 	}
 
@@ -320,12 +323,12 @@ class OptionsController {
 			await browser.storage.sync.set({ [storageKey]: currentList });
 
 			if (validDomains.length === 1) {
-				this.#showToast(`Domain ${validDomains[0]} added successfully!`);
+				this.#showToast(I18n.getMessage('toastDomainAddedSingle', validDomains[0]));
 			} else {
-				this.#showToast(`Added ${addedCount} domains successfully!`);
+				this.#showToast(I18n.getMessage('toastDomainAddedMultiple', addedCount.toString()));
 			}
 		} else {
-			this.#showToast('All provided domains are already in the list.');
+			this.#showToast(I18n.getMessage('toastDomainsAlreadyInList'));
 		}
 
 		inputElement.value = '';
@@ -371,7 +374,8 @@ class OptionsController {
 		for (const [categoryName, items] of Object.entries(RECOMMENDED_LISTS)) {
 			const categoryTitle = document.createElement('h4');
 			categoryTitle.className = 'qf-category-title';
-			categoryTitle.textContent = categoryName;
+			const categoryKey = `category${categoryName.replace(/\s+/g, '')}`;
+			categoryTitle.textContent = I18n.getMessage(categoryKey) || categoryName;
 			this.#presetsContainer.appendChild(categoryTitle);
 
 			for (const item of items) {
@@ -398,7 +402,7 @@ class OptionsController {
 					linkEl.href = infoUrl;
 					linkEl.target = '_blank';
 					linkEl.rel = 'noopener noreferrer';
-					linkEl.textContent = 'Learn more';
+					linkEl.textContent = I18n.getMessage('presetLearnMore');
 					infoBlock.appendChild(linkEl);
 				}
 
@@ -412,14 +416,14 @@ class OptionsController {
 						if (!success) {
 							event.target.checked = false;
 						} else {
-							this.#showToast('List added successfully!');
+							this.#showToast(I18n.getMessage('toastListAdded'));
 						}
 					} else {
 						const syncData = await browser.storage.sync.get({
 							filterLists: [],
 						});
 						await this.#removeFilterList(item.url, syncData.filterLists);
-						this.#showToast('List removed successfully!');
+						this.#showToast(I18n.getMessage('toastListRemoved'));
 					}
 				});
 
@@ -528,7 +532,7 @@ class OptionsController {
 			return true;
 		} catch (error) {
 			console.error('[Qwant Filter] Failed to fetch list:', error);
-			this.#showToast('Failed to load list. Please check the URL or try again later.');
+			this.#showToast(I18n.getMessage('toastListFetchError'));
 			return false;
 		}
 	}
@@ -559,7 +563,7 @@ class OptionsController {
 
 		if (customLists.length === 0) {
 			const emptyItem = document.createElement('li');
-			emptyItem.textContent = 'No custom lists added yet.';
+			emptyItem.textContent = I18n.getMessage('optionsNoCustomLists');
 			this.#filterListElement.replaceChildren(emptyItem);
 			return;
 		}
@@ -576,7 +580,7 @@ class OptionsController {
 			urlText.textContent = list.url;
 			button.addEventListener('click', async () => {
 				await this.#removeFilterList(list.url, lists);
-				this.#showToast('Custom list removed successfully!');
+				this.#showToast(I18n.getMessage('toastCustomListRemoved'));
 			});
 
 			this.#filterListElement.appendChild(clone);
@@ -675,10 +679,15 @@ class OptionsController {
 	 */
 	#updatePresetsButtonLabel() {
 		const isHidden = this.#presetsContainer.hasAttribute('hidden');
-		const baseText = isHidden ? 'Show Recommended Lists' : 'Hide Recommended Lists';
+		const baseText = isHidden
+			? I18n.getMessage('optionsShowRecommendedLists')
+			: I18n.getMessage('optionsHideRecommendedLists');
 
 		if (this.#activePresetCount > 0) {
-			this.#togglePresetsLabel.textContent = `${baseText} (${this.#activePresetCount} enabled)`;
+			this.#togglePresetsLabel.textContent = I18n.getMessage('optionsPresetsCountEnabled', [
+				baseText,
+				this.#activePresetCount.toString(),
+			]);
 		} else {
 			this.#togglePresetsLabel.textContent = baseText;
 		}
@@ -748,7 +757,7 @@ class OptionsController {
 		a.click();
 
 		URL.revokeObjectURL(url);
-		this.#showToast('Settings exported successfully!');
+		this.#showToast(I18n.getMessage('toastSettingsExported'));
 	}
 
 	/**
@@ -772,15 +781,15 @@ class OptionsController {
 				const dataToSet = this.#validateImportData(importedData);
 
 				if (Object.keys(dataToSet).length === 0) {
-					this.#showToast('No valid settings found in the file.');
+					this.#showToast(I18n.getMessage('toastNoValidSettings'));
 					return;
 				}
 
 				await browser.storage.sync.set(dataToSet);
-				this.#showToast('Settings imported successfully!');
+				this.#showToast(I18n.getMessage('toastSettingsImported'));
 			} catch (error) {
 				console.error('[Qwant Filter] Import parsing error:', error);
-				this.#showToast('Failed to parse the imported file.');
+				this.#showToast(I18n.getMessage('toastImportParseError'));
 			} finally {
 				event.target.value = '';
 			}

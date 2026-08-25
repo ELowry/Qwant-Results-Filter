@@ -1,10 +1,20 @@
 <dialog id="qf-confirm-modal" class="qwant-filter-modal">
 	<div class="qf-quick-settings-modal-content">
-		<h3 id="qf-confirm-title">Confirm</h3>
+		<h3 id="qf-confirm-title" data-i18n="confirmModalTitleDefault">Confirm</h3>
 		<p id="qf-confirm-message"></p>
 		<div class="modal-actions">
-			<button id="qf-confirm-cancel" class="qf-btn-base qf-btn-standard"> Cancel </button>
-			<button id="qf-confirm-submit" class="qf-btn-base qf-btn-standard qf-btn-primary">
+			<button
+				id="qf-confirm-cancel"
+				class="qf-btn-base qf-btn-standard"
+				data-i18n="confirmCancelButton"
+			>
+				Cancel
+			</button>
+			<button
+				id="qf-confirm-submit"
+				class="qf-btn-base qf-btn-standard qf-btn-primary"
+				data-i18n="confirmSubmitButton"
+			>
 				Confirm
 			</button>
 		</div>
@@ -14,12 +24,15 @@
 <dialog id="qf-quick-settings-modal" class="qwant-filter-modal">
 	<div class="qf-quick-settings-modal-content">
 		<header>
-			<h3>Results Filter Quick Settings</h3>
+			<h3 data-i18n="quickSettingsTitle">Results Filter Quick Settings</h3>
 			<button
 				tabindex="0"
 				aria-label="Close"
+				title="Close"
 				id="qf-qs-close"
 				class="qf-btn-base qf-btn-icon-circular"
+				data-i18n-aria-label="modalCloseAriaLabel"
+				data-i18n-title="modalCloseAriaLabel"
 			>
 				<svg
 					stroke="currentColor"
@@ -39,7 +52,10 @@
 
 		<div class="qf-toggle-wrapper">
 			<div class="qf-toggle-label-container">
-				<label for="qf-toggle-reveal-switch" class="qf-toggle-label"
+				<label
+					for="qf-toggle-reveal-switch"
+					class="qf-toggle-label"
+					data-i18n="optionsRevealLabel"
 					>Show Filtered Results (dimmed)</label
 				>
 			</div>
@@ -50,12 +66,16 @@
 		</div>
 
 		<hr />
-		<h4 id="qf-blocked-header">Blocked on this page:</h4>
+		<h4 id="qf-blocked-header" data-i18n="quickSettingsBlockedHeader">Blocked on this page:</h4>
 		<ul id="qf-page-blocked-list" class="blocked-list"></ul>
 		<hr />
 
 		<div class="modal-actions">
-			<button id="qf-open-options" class="qf-btn-base qf-btn-standard">
+			<button
+				id="qf-open-options"
+				class="qf-btn-base qf-btn-standard"
+				data-i18n="quickSettingsOpenOptions"
+			>
 				Open Settings
 			</button>
 		</div>
@@ -71,7 +91,13 @@
 </template>
 
 <template id="template-unblock-button">
-	<button class="qf-btn-base qf-btn-icon-rounded qf-btn-danger-solid">
+	<button
+		class="qf-btn-base qf-btn-icon-rounded qf-btn-danger-solid"
+		aria-label="Unblock domain"
+		title="Unblock domain"
+		data-i18n-aria-label="unblockDomainAriaLabel"
+		data-i18n-title="unblockDomainAriaLabel"
+	>
 		<svg
 			stroke="currentColor"
 			fill="currentColor"

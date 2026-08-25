@@ -1,3 +1,5 @@
+import { I18n } from './i18n.js';
+
 /**
  * Controller for managing injected UI components, modals, and user interactions.
  */
@@ -7,7 +9,7 @@ class InjectedUIController {
 	#onOpenOptionsCallback;
 
 	/**
-	 * Initializes a new instance of the injectedUIController.
+	 * Initializes a new instance of the InjectedUIController.
 	 */
 	constructor() {
 		this.#pendingDomain = null;
@@ -56,7 +58,7 @@ class InjectedUIController {
 	}
 
 	/**
-	 * Fetches and injects the necessary dialog templates into the document body.
+	 * Fetches, translates, and injects the necessary dialog templates into the document body.
 	 * @private
 	 * @returns {Promise<void>} Resolves when templates have been successfully appended.
 	 */
@@ -67,6 +69,8 @@ class InjectedUIController {
 
 		const parser = new DOMParser();
 		const parsedDoc = parser.parseFromString(htmlText, 'text/html');
+
+		I18n.translateDom(parsedDoc.body);
 
 		document.body.append(...parsedDoc.body.children);
 	}
@@ -147,11 +151,11 @@ class InjectedUIController {
 		const message = document.getElementById('qf-confirm-message');
 
 		if (action === 'block') {
-			title.textContent = 'Block Domain';
-			message.textContent = `Hide all search results from ${domain}?`;
+			title.textContent = I18n.getMessage('confirmBlockDomainTitle');
+			message.textContent = I18n.getMessage('confirmBlockDomainMessage', domain);
 		} else {
-			title.textContent = 'Unblock Domain';
-			message.textContent = `Restore search results from ${domain}?`;
+			title.textContent = I18n.getMessage('confirmUnblockDomainTitle');
+			message.textContent = I18n.getMessage('confirmUnblockDomainMessage', domain);
 		}
 
 		const qsModal = document.getElementById('qf-quick-settings-modal');
@@ -185,14 +189,17 @@ class InjectedUIController {
 		if (counterButton) {
 			if (totalResults === 0) {
 				counterButton.textContent = '…';
-				counterButton.title = 'Waiting for search results...';
+				counterButton.title = I18n.getMessage('counterWaiting');
 			} else {
 				counterButton.textContent = count;
 
 				if (count === 1) {
-					counterButton.title = '1 filtered result on this page. Click for details.';
+					counterButton.title = I18n.getMessage('counterResultSingle');
 				} else {
-					counterButton.title = `${count} filtered results on this page. Click for details.`;
+					counterButton.title = I18n.getMessage(
+						'counterResultMultiple',
+						count.toString()
+					);
 				}
 			}
 		}
@@ -217,11 +224,11 @@ class InjectedUIController {
 		toggleSwitch.checked = isRevealMode;
 
 		if (activeBlockedDetails.length === 0) {
-			header.textContent = 'No domains are blocked on this page. 🧹✨';
+			header.textContent = I18n.getMessage('quickSettingsNoBlockedDomains');
 			return;
 		}
 
-		header.textContent = 'Blocked on this page:';
+		header.textContent = I18n.getMessage('quickSettingsBlockedHeader');
 
 		const template = document.getElementById('template-blocked-item');
 
@@ -313,11 +320,11 @@ class InjectedUIController {
 
 		if (isBlocked) {
 			button.className = `${InjectedUIController.BUTTON_CLASS} qf-btn-base qf-btn-purple`;
-			button.textContent = 'Unblock';
+			button.textContent = I18n.getMessage('actionUnblock');
 			button.dataset.qfAction = 'unblock';
 		} else {
 			button.className = `${InjectedUIController.BUTTON_CLASS} qf-btn-base qf-btn-danger`;
-			button.textContent = 'Block';
+			button.textContent = I18n.getMessage('actionBlock');
 			button.dataset.qfAction = 'block';
 		}
 	}

@@ -1,0 +1,276 @@
+{
+	"extensionName": {
+		"message": "Qwant Results Filter"
+	},
+	"extensionDescription": {
+		"message": "Désencombrez les résultats de recherche Qwant et trouvez ce que vous cherchez vraiment."
+	},
+	"actionTitle": {
+		"message": "Filtrage des Résultats Qwant"
+	},
+	"optionsPageTitle": {
+		"message": "Paramètres de filtrage des résultats Qwant"
+	},
+	"optionsRevealLabel": {
+		"message": "Afficher les résultats filtrés (semi-transparents)"
+	},
+	"optionsCommunityFiltersHeader": {
+		"message": "Listes de filtrage communautaires"
+	},
+	"optionsCommunityFiltersIntro": {
+		"message": "Vous pouvez choisir parmi la listes de filtrage recommandées:"
+	},
+	"optionsCommunityFiltersImportantNotice": {
+		"message": "IMPORTANT: ces listes sont créées et maintenues indépendamment par des contributeur·rice·s individuel·le·s. Elles proviennent directement du $LINK_START$site de uBlacklist$LINK_END$.",
+		"placeholders": {
+			"link_start": {
+				"content": "<a href=\"https://ublacklist.github.io/rulesets\" target=\"_blank\" rel=\"noopener noreferrer\">"
+			},
+			"link_end": {
+				"content": "</a>"
+			}
+		}
+	},
+	"optionsShowRecommendedLists": {
+		"message": "Afficher les listes recommandées"
+	},
+	"optionsHideRecommendedLists": {
+		"message": "Masquer les listes recommandées"
+	},
+	"optionsPresetsCountEnabled": {
+		"message": "$BASE_TEXT$ ($COUNT$ activée(s))",
+		"placeholders": {
+			"base_text": {
+				"content": "$1"
+			},
+			"count": {
+				"content": "$2"
+			}
+		}
+	},
+	"optionsDirectLinkIntro": {
+		"message": "Ou vous pouvez fournir un lien direct vers une liste au $LINK_START$format uBlacklist$LINK_END$.",
+		"placeholders": {
+			"link_start": {
+				"content": "<a href=\"https://github.com/iorate/ublacklist\" target=\"_blank\" rel=\"noopener noreferrer\">"
+			},
+			"link_end": {
+				"content": "</a>"
+			}
+		}
+	},
+	"optionsListUrlPlaceholder": {
+		"message": "https://raw.githubusercontent.com/.../list.txt"
+	},
+	"optionsAddListButton": {
+		"message": "Ajouter la liste"
+	},
+	"optionsBlockedDomainsHeader": {
+		"message": "Domaines bloqués manuellement"
+	},
+	"optionsDomainInputPlaceholder": {
+		"message": "exemple.fr"
+	},
+	"optionsDomainPatternTitle": {
+		"message": "Veuillez entrer un domaine valide (ex: exemple.fr)"
+	},
+	"optionsBlockDomainButton": {
+		"message": "Bloquer le domaine"
+	},
+	"optionsWhitelistedDomainsHeader": {
+		"message": "Domaines sur liste blanche"
+	},
+	"optionsWhitelistDomainButton": {
+		"message": "Mettre sur liste blanche"
+	},
+	"optionsImportExportHeader": {
+		"message": "Importer/exporter les paramètres"
+	},
+	"optionsImportExportDescription": {
+		"message": "Exportez vos paramètres actuels dans un fichier, ou importez une sauvegarde existante."
+	},
+	"optionsExportSettingsButton": {
+		"message": "Exporter les paramètres"
+	},
+	"optionsImportSettingsButton": {
+		"message": "Importer les paramètres"
+	},
+	"optionsRemoveListAriaLabel": {
+		"message": "Supprimer la liste"
+	},
+	"optionsRemoveDomainAriaLabel": {
+		"message": "Supprimer le domaine"
+	},
+	"optionsNoDomainsBlocked": {
+		"message": "Aucun domaine n'est actuellement bloqué."
+	},
+	"optionsNoDomainsWhitelisted": {
+		"message": "Aucun domaine n'est actuellement sur liste blanche."
+	},
+	"optionsNoCustomLists": {
+		"message": "Aucune liste personnalisée n'a été ajoutée pour le moment."
+	},
+	"buttonAdding": {
+		"message": "Ajout en cours…"
+	},
+	"buttonFetching": {
+		"message": "Récupération en cours…"
+	},
+	"presetLearnMore": {
+		"message": "À propos…"
+	},
+	"categorySecurity": {
+		"message": "Sécurité"
+	},
+	"categorySpam": {
+		"message": "Spam"
+	},
+	"categorySpecificSites": {
+		"message": "Sites spécifiques"
+	},
+	"categoryChinese": {
+		"message": "Chinois"
+	},
+	"categoryItalian": {
+		"message": "Italien"
+	},
+	"categoryJapanese": {
+		"message": "Japonais"
+	},
+	"categoryPortuguese": {
+		"message": "Portugais"
+	},
+	"categoryAiGeneratedContent": {
+		"message": "Contenu généré par IA"
+	},
+	"categoryCopycatSites": {
+		"message": "Sites clones"
+	},
+	"categoryGaming": {
+		"message": "Jeux vidéo"
+	},
+	"categoryMediaSites": {
+		"message": "Sites de médias"
+	},
+	"toastCustomListRemoved": {
+		"message": "Liste personnalisée supprimée avec succès!"
+	},
+	"toastListAddedFromPresets": {
+		"message": "Liste recommandée ajoutée avec succès!"
+	},
+	"toastListAlreadyActive": {
+		"message": "Cette liste recommandée est déjà active!"
+	},
+	"toastCustomListAdded": {
+		"message": "Liste de filtrage personnalisée ajoutée avec succès!"
+	},
+	"toastDomainAddedSingle": {
+		"message": "Domaine $DOMAIN$ ajouté avec succès!",
+		"placeholders": {
+			"domain": {
+				"content": "$1"
+			}
+		}
+	},
+	"toastDomainAddedMultiple": {
+		"message": "$COUNT$ domaines ajoutés avec succès!",
+		"placeholders": {
+			"count": {
+				"content": "$1"
+			}
+		}
+	},
+	"toastDomainsAlreadyInList": {
+		"message": "Tous les domaines fournis sont déjà dans la liste."
+	},
+	"toastListAdded": {
+		"message": "Liste ajoutée avec succès!"
+	},
+	"toastListRemoved": {
+		"message": "Liste supprimée avec succès!"
+	},
+	"toastSettingsExported": {
+		"message": "Paramètres exportés avec succès!"
+	},
+	"toastNoValidSettings": {
+		"message": "Aucun paramètre valide n'est présent dans le fichier."
+	},
+	"toastSettingsImported": {
+		"message": "Paramètres importés avec succès!"
+	},
+	"toastImportParseError": {
+		"message": "Échec de l'analyse du fichier importé."
+	},
+	"toastListFetchError": {
+		"message": "Échec du chargement de la liste. Veuillez vérifier l'URL ou réessayer plus tard."
+	},
+	"confirmModalTitleDefault": {
+		"message": "Confirmer"
+	},
+	"confirmBlockDomainTitle": {
+		"message": "Bloquer le domaine"
+	},
+	"confirmBlockDomainMessage": {
+		"message": "Masquer tous les résultats de recherche de $DOMAIN$?",
+		"placeholders": {
+			"domain": {
+				"content": "$1"
+			}
+		}
+	},
+	"confirmUnblockDomainTitle": {
+		"message": "Débloquer le domaine"
+	},
+	"confirmUnblockDomainMessage": {
+		"message": "Restaurer les résultats de recherche de $DOMAIN$?",
+		"placeholders": {
+			"domain": {
+				"content": "$1"
+			}
+		}
+	},
+	"confirmCancelButton": {
+		"message": "Annuler"
+	},
+	"confirmSubmitButton": {
+		"message": "Confirmer"
+	},
+	"quickSettingsTitle": {
+		"message": "Paramètres de filtrage"
+	},
+	"modalCloseAriaLabel": {
+		"message": "Fermer"
+	},
+	"quickSettingsBlockedHeader": {
+		"message": "Bloqué sur cette page:"
+	},
+	"quickSettingsNoBlockedDomains": {
+		"message": "Aucun domaine n'est bloqué sur cette page. ✨🧹"
+	},
+	"quickSettingsOpenOptions": {
+		"message": "Ouvrir les paramètres"
+	},
+	"unblockDomainAriaLabel": {
+		"message": "Débloquer le domaine"
+	},
+	"counterWaiting": {
+		"message": "Recherche en cours…"
+	},
+	"counterResultSingle": {
+		"message": "1 résultat filtré sur cette page. Cliquez pour plus de détails."
+	},
+	"counterResultMultiple": {
+		"message": "$COUNT$ résultats filtrés sur cette page. Cliquez pour plus de détails.",
+		"placeholders": {
+			"count": {
+				"content": "$1"
+			}
+		}
+	},
+	"actionBlock": {
+		"message": "Bloquer"
+	},
+	"actionUnblock": {
+		"message": "Débloquer"
+	}
+}

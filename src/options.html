@@ -2,16 +2,19 @@
 <html>
 	<head>
 		<meta charset="utf-8" />
-		<title>Qwant Filter Settings</title>
+		<title data-i18n="optionsPageTitle">Qwant Filter Settings</title>
 		<link rel="stylesheet" href="css/shared.css" />
 		<link rel="stylesheet" href="css/options.css" />
 	</head>
 	<body>
-		<h2>Qwant Filter Settings</h2>
+		<h2 data-i18n="optionsPageTitle">Qwant Filter Settings</h2>
 
 		<div class="qf-toggle-wrapper">
 			<div class="qf-toggle-label-container">
-				<label for="options-reveal-switch" class="qf-toggle-label"
+				<label
+					for="options-reveal-switch"
+					class="qf-toggle-label"
+					data-i18n="optionsRevealLabel"
 					>Show Filtered Results (dimmed)</label
 				>
 			</div>
@@ -23,13 +26,15 @@
 
 		<hr />
 
-		<h3>Community Filter Lists</h3>
+		<h3 data-i18n="optionsCommunityFiltersHeader">Community Filter Lists</h3>
 
-		<p>You can select from a curated list of filters:</p>
+		<p data-i18n="optionsCommunityFiltersIntro">
+			You can select from a curated list of filters:
+		</p>
 
 		<blockquote>
-			<p>
-				IMPORTANT: these lists are independently created and maintained by individualusers.
+			<p data-i18n-html="optionsCommunityFiltersImportantNotice">
+				IMPORTANT: these lists are independently created and maintained by individual users.
 				They were pulled directly from the
 				<a
 					href="https://ublacklist.github.io/rulesets"
@@ -55,13 +60,15 @@
 				>
 					<polyline points="6 9 12 15 18 9"></polyline>
 				</svg>
-				<span id="qf-toggle-presets-label">Show Recommended Lists</span>
+				<span id="qf-toggle-presets-label" data-i18n="optionsShowRecommendedLists"
+					>Show Recommended Lists</span
+				>
 			</button>
 		</div>
 
 		<div id="qf-presets-container" class="qf-presets-container" hidden></div>
 
-		<p>
+		<p data-i18n-html="optionsDirectLinkIntro">
 			Or you can provide a direct link to any list that follow the
 			<a href="https://github.com/iorate/ublacklist" target="_blank" rel="noopener noreferrer"
 				>uBlacklist format</a
@@ -73,52 +80,71 @@
 				type="url"
 				id="qf-list-input"
 				placeholder="https://raw.githubusercontent.com/.../list.txt"
+				data-i18n-placeholder="optionsListUrlPlaceholder"
 			/>
-			<button id="qf-add-list-button">Add List</button>
+			<button id="qf-add-list-button" data-i18n="optionsAddListButton">Add List</button>
 		</div>
 
 		<ul id="options-filter-lists"></ul>
 
 		<hr />
 
-		<h3>Manually Blocked Domains</h3>
+		<h3 data-i18n="optionsBlockedDomainsHeader">Manually Blocked Domains</h3>
 		<form id="qf-add-block-form" class="qf-form-group">
 			<input
 				type="text"
 				id="qf-block-input"
 				placeholder="example.com"
+				data-i18n-placeholder="optionsDomainInputPlaceholder"
 				pattern="^(?:(?:[a-zA-Z0-9\-]+\.)+[a-zA-Z]{2,})(?:[,\s]+(?:[a-zA-Z0-9\-]+\.)+[a-zA-Z]{2,})*$"
 				title="Please enter a valid domain (e.g., example.com)"
+				data-i18n-title="optionsDomainPatternTitle"
 				required
 			/>
-			<button type="submit">Block Domain</button>
+			<button type="submit" data-i18n="optionsBlockDomainButton">Block Domain</button>
 		</form>
 		<ul id="options-domain-list"></ul>
 
 		<div id="options-whitelist-container" hidden>
 			<hr />
-			<h3>Whitelisted Domains</h3>
+			<h3 data-i18n="optionsWhitelistedDomainsHeader">Whitelisted Domains</h3>
 			<form id="qf-add-whitelist-form" class="qf-form-group">
 				<input
 					type="text"
 					id="qf-whitelist-input"
 					placeholder="example.com"
+					data-i18n-placeholder="optionsDomainInputPlaceholder"
 					pattern="^(?:(?:[a-zA-Z0-9\-]+\.)+[a-zA-Z]{2,})(?:[,\s]+(?:[a-zA-Z0-9\-]+\.)+[a-zA-Z]{2,})*$"
 					title="Please enter a valid domain (e.g., example.com)"
+					data-i18n-title="optionsDomainPatternTitle"
 					required
 				/>
-				<button type="submit">Whitelist Domain</button>
+				<button type="submit" data-i18n="optionsWhitelistDomainButton"
+					>Whitelist Domain</button
+				>
 			</form>
 			<ul id="options-whitelist-list"></ul>
 		</div>
 
 		<hr />
 
-		<h3>Import/Export Settings</h3>
-		<p>Export your current settings to a file, or import an existing backup.</p>
+		<h3 data-i18n="optionsImportExportHeader">Import/Export Settings</h3>
+		<p data-i18n="optionsImportExportDescription"
+			>Export your current settings to a file, or import an existing backup.</p
+		>
 		<div class="qf-form-group">
-			<button id="qf-export-button" class="qf-btn-standard"> Export Settings </button>
-			<button id="qf-import-button" class="qf-btn-standard"> Import Settings </button>
+			<button
+				id="qf-export-button"
+				class="qf-btn-standard"
+				data-i18n="optionsExportSettingsButton"
+				>Export Settings</button
+			>
+			<button
+				id="qf-import-button"
+				class="qf-btn-standard"
+				data-i18n="optionsImportSettingsButton"
+				>Import Settings</button
+			>
 			<input type="file" id="qf-import-file" accept=".json" hidden />
 		</div>
 
@@ -142,6 +168,8 @@
 					class="qf-remove-btn qf-remove-icon-btn"
 					aria-label="Remove List"
 					title="Remove List"
+					data-i18n-aria-label="optionsRemoveListAriaLabel"
+					data-i18n-title="optionsRemoveListAriaLabel"
 				>
 					<svg
 						stroke="currentColor"
@@ -165,6 +193,8 @@
 					class="qf-remove-btn qf-remove-icon-btn"
 					aria-label="Remove Domain"
 					title="Remove Domain"
+					data-i18n-aria-label="optionsRemoveDomainAriaLabel"
+					data-i18n-title="optionsRemoveDomainAriaLabel"
 				>
 					<svg
 						stroke="currentColor"
@@ -182,7 +212,7 @@
 		</template>
 
 		<!-- Toast Notification -->
-		<div id="qf-toast" class="qf-toast">Filter list updated!</div>
+		<div id="qf-toast" class="qf-toast"></div>
 
 		<script type="module" src="js/options.js"></script>
 	</body>
