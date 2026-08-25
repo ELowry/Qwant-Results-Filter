@@ -11,6 +11,7 @@
 		"format": "prettier --write \"src/**/*.{js,css,html,md}\"",
 		"dev": "web-ext run --source-dir src",
 		"build": "npm run generate && npm run lint && web-ext build --source-dir src --artifacts-dir dist --overwrite-dest",
+		"build:source": "npm run lint && node scripts/build-source.mjs",
 		"update": "npm update && npm ci && npm i",
 		"upgrade": "npx npm-check-updates -u"
 	},

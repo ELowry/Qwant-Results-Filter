@@ -17,3 +17,6 @@ Thumbs.db
 
 # Local Dev Settings
 web-ext-config.mjs
+
+# Unrelated Assets
+assets/
