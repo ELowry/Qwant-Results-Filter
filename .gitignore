@@ -1,0 +1,19 @@
+# Node dependencies
+node_modules/
+npm-debug.log*
+
+# Build artifacts
+dist/
+web-ext-artifacts/
+
+# OS and Editor files
+.DS_Store
+Thumbs.db
+.vscode/
+.idea/
+
+# Fallow
+.fallow/
+
+# Local Dev Settings
+web-ext-config.mjs

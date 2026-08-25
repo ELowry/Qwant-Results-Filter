@@ -1,0 +1,31 @@
+{
+	"name": "qwant-results-filter",
+	"version": "0.1.0",
+	"type": "module",
+	"main": "AppController.js",
+	"scripts": {
+		"generate": "node scripts/fetch-presets.mjs && prettier --write src/js/modules/presets.js",
+		"lint": "eslint . && prettier --check . && npm run lint:ext",
+		"lint:fix": "eslint . --fix && prettier --write .",
+		"lint:ext": "web-ext lint --source-dir src",
+		"format": "prettier --write \"src/**/*.{js,css,html,md}\"",
+		"dev": "web-ext run --source-dir src",
+		"build": "npm run generate && npm run lint && web-ext build --source-dir src --artifacts-dir dist --overwrite-dest",
+		"update": "npm update && npm ci && npm i",
+		"upgrade": "npx npm-check-updates -u"
+	},
+	"allowScripts": {
+		"web-ext": true
+	},
+	"devDependencies": {
+		"@eslint/js": "^10.0.1",
+		"eslint": "^10.9.0",
+		"eslint-config-prettier": "^10.1.8",
+		"eslint-plugin-jsdoc": "^64.2.1",
+		"globals": "^17.11.0",
+		"js-yaml": "^5.3.0",
+		"prettier": "^3.9.6",
+		"prettier-plugin-css-order": "^2.2.0",
+		"web-ext": "^10.6.0"
+	}
+}

@@ -1,0 +1,19 @@
+# Node modules
+/node_modules
+
+# Vite build output
+/build
+
+# Logs
+*.log
+npm-debug.log*
+
+# IDE and Environment
+.vscode/
+
+# Environment files (local configs)
+/.env.*
+
+# Minified files or specific assets (optional but good practice)
+*.min.js
+*.min.css

@@ -1,0 +1,189 @@
+<!doctype html>
+<html>
+	<head>
+		<meta charset="utf-8" />
+		<title>Qwant Filter Settings</title>
+		<link rel="stylesheet" href="css/shared.css" />
+		<link rel="stylesheet" href="css/options.css" />
+	</head>
+	<body>
+		<h2>Qwant Filter Settings</h2>
+
+		<div class="qf-toggle-wrapper">
+			<div class="qf-toggle-label-container">
+				<label for="options-reveal-switch" class="qf-toggle-label"
+					>Show Filtered Results (dimmed)</label
+				>
+			</div>
+			<label class="qf-toggle-switch">
+				<input type="checkbox" role="switch" id="options-reveal-switch" />
+				<span class="qf-toggle-slider"></span>
+			</label>
+		</div>
+
+		<hr />
+
+		<h3>Community Filter Lists</h3>
+
+		<p>You can select from a curated list of filters:</p>
+
+		<blockquote>
+			<p>
+				IMPORTANT: these lists are independently created and maintained by individualusers.
+				They were pulled directly from the
+				<a
+					href="https://ublacklist.github.io/rulesets"
+					target="_blank"
+					rel="noopener noreferrer"
+					>uBlacklist website</a
+				>.
+			</p>
+		</blockquote>
+
+		<div class="qf-form-group">
+			<button id="qf-toggle-presets-button" class="qf-btn-standard" aria-expanded="false">
+				<svg
+					class="qf-icon-chevron"
+					viewBox="0 0 24 24"
+					width="16"
+					height="16"
+					stroke="currentColor"
+					fill="none"
+					stroke-width="2"
+					stroke-linecap="round"
+					stroke-linejoin="round"
+				>
+					<polyline points="6 9 12 15 18 9"></polyline>
+				</svg>
+				<span id="qf-toggle-presets-label">Show Recommended Lists</span>
+			</button>
+		</div>
+
+		<div id="qf-presets-container" class="qf-presets-container" hidden></div>
+
+		<p>
+			Or you can provide a direct link to any list that follow the
+			<a href="https://github.com/iorate/ublacklist" target="_blank" rel="noopener noreferrer"
+				>uBlacklist format</a
+			>.
+		</p>
+
+		<div class="qf-form-group">
+			<input
+				type="url"
+				id="qf-list-input"
+				placeholder="https://raw.githubusercontent.com/.../list.txt"
+			/>
+			<button id="qf-add-list-button">Add List</button>
+		</div>
+
+		<ul id="options-filter-lists"></ul>
+
+		<hr />
+
+		<h3>Manually Blocked Domains</h3>
+		<form id="qf-add-block-form" class="qf-form-group">
+			<input
+				type="text"
+				id="qf-block-input"
+				placeholder="example.com"
+				pattern="^(?:(?:[a-zA-Z0-9\-]+\.)+[a-zA-Z]{2,})(?:[,\s]+(?:[a-zA-Z0-9\-]+\.)+[a-zA-Z]{2,})*$"
+				title="Please enter a valid domain (e.g., example.com)"
+				required
+			/>
+			<button type="submit">Block Domain</button>
+		</form>
+		<ul id="options-domain-list"></ul>
+
+		<div id="options-whitelist-container" hidden>
+			<hr />
+			<h3>Whitelisted Domains</h3>
+			<form id="qf-add-whitelist-form" class="qf-form-group">
+				<input
+					type="text"
+					id="qf-whitelist-input"
+					placeholder="example.com"
+					pattern="^(?:(?:[a-zA-Z0-9\-]+\.)+[a-zA-Z]{2,})(?:[,\s]+(?:[a-zA-Z0-9\-]+\.)+[a-zA-Z]{2,})*$"
+					title="Please enter a valid domain (e.g., example.com)"
+					required
+				/>
+				<button type="submit">Whitelist Domain</button>
+			</form>
+			<ul id="options-whitelist-list"></ul>
+		</div>
+
+		<hr />
+
+		<h3>Import/Export Settings</h3>
+		<p>Export your current settings to a file, or import an existing backup.</p>
+		<div class="qf-form-group">
+			<button id="qf-export-button" class="qf-btn-standard"> Export Settings </button>
+			<button id="qf-import-button" class="qf-btn-standard"> Import Settings </button>
+			<input type="file" id="qf-import-file" accept=".json" hidden />
+		</div>
+
+		<!-- Templates -->
+		<template id="template-preset-item">
+			<div class="qf-preset-item">
+				<div class="qf-preset-info">
+					<span class="qf-preset-name"></span>
+				</div>
+				<label class="qf-toggle-switch">
+					<input type="checkbox" role="switch" />
+					<span class="qf-toggle-slider"></span>
+				</label>
+			</div>
+		</template>
+
+		<template id="template-filter-list-item">
+			<li style="gap: 8px; overflow: hidden">
+				<span class="qf-list-url" style="font-size: 0.85em; word-break: break-all"></span>
+				<button
+					class="qf-remove-btn qf-remove-icon-btn"
+					aria-label="Remove List"
+					title="Remove List"
+				>
+					<svg
+						stroke="currentColor"
+						fill="currentColor"
+						stroke-width="0"
+						viewBox="0 0 24 24"
+						xmlns="http://www.w3.org/2000/svg"
+					>
+						<path
+							d="M11.9997 10.5865L16.9495 5.63672L18.3637 7.05093L13.4139 12.0007L18.3637 16.9504L16.9495 18.3646L11.9997 13.4149L7.04996 18.3646L5.63574 16.9504L10.5855 12.0007L5.63574 7.05093L7.04996 5.63672L11.9997 10.5865Z"
+						></path>
+					</svg>
+				</button>
+			</li>
+		</template>
+
+		<template id="template-domain-item">
+			<li>
+				<span class="qf-domain-name"></span>
+				<button
+					class="qf-remove-btn qf-remove-icon-btn"
+					aria-label="Remove Domain"
+					title="Remove Domain"
+				>
+					<svg
+						stroke="currentColor"
+						fill="currentColor"
+						stroke-width="0"
+						viewBox="0 0 24 24"
+						xmlns="http://www.w3.org/2000/svg"
+					>
+						<path
+							d="M11.9997 10.5865L16.9495 5.63672L18.3637 7.05093L13.4139 12.0007L18.3637 16.9504L16.9495 18.3646L11.9997 13.4149L7.04996 18.3646L5.63574 16.9504L10.5855 12.0007L5.63574 7.05093L7.04996 5.63672L11.9997 10.5865Z"
+						></path>
+					</svg>
+				</button>
+			</li>
+		</template>
+
+		<!-- Toast Notification -->
+		<div id="qf-toast" class="qf-toast">Filter list updated!</div>
+
+		<script type="module" src="js/options.js"></script>
+	</body>
+</html>
