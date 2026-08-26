@@ -29,16 +29,20 @@ jobs:
             - name: Verify Version Integrity
               run: |
                   # Remove the refs/tags/v part to get the raw tag (e.g., 0.2.0)
-                  TAG_VERSION=${GITHUB_REF#refs/tags/v}
+                  FULL_TAG=${GITHUB_REF#refs/tags/v}
+
+                  # Strip anything after the hyphen to get the base version (e.g., 0.2.1)
+                  BASE_TAG_VERSION=${FULL_TAG%%-*}
 
                   # Read version from manifest.json
                   MANIFEST_VERSION=$(node -p "require('./src/manifest.json').version")
 
-                  echo "Git Tag Version: $TAG_VERSION"
+                  echo "Full Git Tag: $FULL_TAG"
+                  echo "Base Tag Version: $BASE_TAG_VERSION"
                   echo "Manifest Version: $MANIFEST_VERSION"
 
-                  if [ "$TAG_VERSION" != "$MANIFEST_VERSION" ]; then
-                    echo "::error::Version mismatch! Git tag ($TAG_VERSION) does not match manifest.json ($MANIFEST_VERSION)."
+                  if [ "$BASE_TAG_VERSION" != "$MANIFEST_VERSION" ]; then
+                   echo "::error::Version mismatch! Base git tag ($BASE_TAG_VERSION) does not match manifest.json ($MANIFEST_VERSION)."
                     exit 1
                   fi
 
