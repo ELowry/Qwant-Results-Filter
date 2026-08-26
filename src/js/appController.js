@@ -502,6 +502,13 @@ class AppController {
 		const port = browser.runtime.connect({ name: 'qf-cleanup-port' });
 
 		port.onDisconnect.addListener(() => {
+			try {
+				// False if the extension was disabled or updated, true when the background worker has been suspended because the page was idling.
+				if (browser.runtime.id) {
+					return;
+				}
+			} catch (error) {}
+
 			this.#cleanup();
 		});
 	}
