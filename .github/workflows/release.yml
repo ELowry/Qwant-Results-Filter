@@ -1,0 +1,121 @@
+name: Release Qwant Filter
+
+on:
+    push:
+        tags:
+            - 'v*.*.*'
+
+jobs:
+    build-and-release:
+        runs-on: ubuntu-latest
+        permissions:
+            contents: write
+            id-token: write
+            attestations: write
+            artifact-metadata: write
+
+        steps:
+            - name: Checkout Code
+              uses: actions/checkout@v7
+              with:
+                  fetch-depth: 0
+
+            - name: Setup Node.js
+              uses: actions/setup-node@v7
+              with:
+                  node-version: '20'
+                  cache: 'npm'
+
+            - name: Verify Version Integrity
+              run: |
+                  # Remove the refs/tags/v part to get the raw tag (e.g., 0.2.0)
+                  TAG_VERSION=${GITHUB_REF#refs/tags/v}
+
+                  # Read version from manifest.json
+                  MANIFEST_VERSION=$(node -p "require('./src/manifest.json').version")
+
+                  echo "Git Tag Version: $TAG_VERSION"
+                  echo "Manifest Version: $MANIFEST_VERSION"
+
+                  if [ "$TAG_VERSION" != "$MANIFEST_VERSION" ]; then
+                    echo "::error::Version mismatch! Git tag ($TAG_VERSION) does not match manifest.json ($MANIFEST_VERSION)."
+                    exit 1
+                  fi
+
+                  echo "Versions match. Proceeding with release."
+
+            - name: Install Dependencies
+              run: npm ci
+
+            - name: Package Source Code
+              run: npm run build:source
+
+            - name: Submit Listed to AMO
+              env:
+                  WEB_EXT_API_KEY: ${{ secrets.WEB_EXT_API_KEY }}
+                  WEB_EXT_API_SECRET: ${{ secrets.WEB_EXT_API_SECRET }}
+              run: |
+                  npx web-ext sign \
+                    --source-dir src \
+                    --channel listed \
+                    --api-key $WEB_EXT_API_KEY \
+                    --api-secret $WEB_EXT_API_SECRET
+
+            - name: Mutate Manifest Version for Unlisted Build
+              run: |
+                  node -e "const fs=require('fs'); const m=require('./src/manifest.json'); m.version += 'b'; fs.writeFileSync('./src/manifest.json', JSON.stringify(m, null, '\t') + '\n');"
+
+            - name: Sign & Download Unlisted XPI
+              env:
+                  WEB_EXT_API_KEY: ${{ secrets.WEB_EXT_API_KEY }}
+                  WEB_EXT_API_SECRET: ${{ secrets.WEB_EXT_API_SECRET }}
+              run: |
+                  npx web-ext sign \
+                    --source-dir src \
+                    --artifacts-dir dist \
+                    --channel unlisted \
+                    --api-key $WEB_EXT_API_KEY \
+                    --api-secret $WEB_EXT_API_SECRET
+
+            - name: Generate Artifact Attestations
+              uses: actions/attest@v4
+              with:
+                  subject-path: 'dist/*'
+
+            - name: Generate Release Notes
+              run: |
+                  # Find the second most recent tag (the previous release)
+                  PREV_TAG=$(git tag --sort=-creatordate | sed -n '2p')
+
+                  # If a previous tag exists, log commits between then and now
+                  if [ -n "$PREV_TAG" ]; then
+                    git log ${PREV_TAG}..${{ github.ref_name }} --pretty=format:"- %s" > generated_notes.txt
+                  else
+                    # Fallback for the very first release
+                    git log -5 --pretty=format:"- %s" > generated_notes.txt
+                  fi
+
+                  # Optional: Append the comparison link at the bottom
+                  echo "" >> generated_notes.txt
+                  echo "" >> generated_notes.txt
+                  echo "**Full Changelog:** https://github.com/${{ github.repository }}/compare/${PREV_TAG}...${{ github.ref_name }}" >> generated_notes.txt
+
+            - name: Create GitHub Release
+              id: create_release
+              uses: softprops/action-gh-release@v3
+              with:
+                  files: |
+                      dist/*-source.zip
+                      dist/*.xpi
+                  draft: true
+                  body_path: generated_notes.txt
+              env:
+                  GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+            - name: Notify Discord
+              uses: ELowry/discord-draft-notifier@v1
+              with:
+                  webhook_url: ${{ secrets.DISCORD_WEBHOOK }}
+                  version: ${{ github.ref_name }}
+                  release_url: ${{ steps.create_release.outputs.url }}
+                  notes_file_path: generated_notes.txt
