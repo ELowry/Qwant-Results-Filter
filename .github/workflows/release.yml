@@ -108,6 +108,7 @@ jobs:
                     --api-secret $WEB_EXT_API_SECRET
 
             - name: Generate Artifact Attestations
+              if: github.event.repository.private == false
               uses: actions/attest@v4
               with:
                   subject-path: 'dist/*'
