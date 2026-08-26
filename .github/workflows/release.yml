@@ -93,7 +93,7 @@ jobs:
 
             - name: Mutate Manifest Version for Unlisted Build
               run: |
-                  node -e "const fs=require('fs'); const m=require('./src/manifest.json'); m.version += 'b${{ github.run_number }}'; fs.writeFileSync('./src/manifest.json', JSON.stringify(m, null, '\t') + '\n');"
+                  node -e "const fs=require('fs'); const m=require('./src/manifest.json'); m.version += '.${{ github.run_number }}'; fs.writeFileSync('./src/manifest.json', JSON.stringify(m, null, '\t') + '\n');"
 
             - name: Sign & Download Unlisted XPI
               env:
