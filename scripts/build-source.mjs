@@ -1,5 +1,5 @@
 import { execSync } from 'node:child_process';
-import { readFileSync } from 'node:fs';
+import { readFileSync, mkdirSync } from 'node:fs';
 
 try {
 	const gitStatus = execSync('git status --porcelain').toString().trim();
@@ -20,6 +20,8 @@ try {
 	const filename = `${safeName}-${pkg.version}-source.zip`;
 
 	console.log(`[Qwant Filter] Packaging source code into dist/${filename}...`);
+
+	mkdirSync('dist', { recursive: true });
 
 	execSync(`git archive -o dist/${filename} HEAD`, { stdio: 'inherit' });
 	console.log('[Qwant Filter] Source packaged successfully!');
