@@ -1,6 +1,7 @@
 import { InjectedUI } from './modules/injectedUI.js';
 import { RECOMMENDED_LISTS } from './modules/presets.js';
 import { UrlUtils } from './modules/utils/url.js';
+import { StorageUtils } from './modules/utils/storage.js';
 
 /**
  * Controller for managing Qwant search result filtering and communicating with the background worker.
@@ -25,6 +26,8 @@ class AppController {
 		this.#debounceTimer = null;
 		this.#lastHiddenCount = 0;
 		this.#lastTotalCount = 0;
+
+		this.#loadSessionCache();
 	}
 
 	/**
@@ -61,7 +64,7 @@ class AppController {
 			}
 
 			if (
-				(areaName === 'sync' && (changes.blockedDomains || changes.whitelistedDomains))
+				(areaName === 'local' && (changes.blockedDomains || changes.whitelistedDomains))
 				|| (areaName === 'local' && changes.filterListCache)
 			) {
 				this.#domainStatusCache.clear();
@@ -72,6 +75,64 @@ class AppController {
 		this.#setupCleanupHook();
 		this.#setupTargetedObserver();
 		this.#processDOM(false);
+
+		window.addEventListener('pageshow', async (event) => {
+			if (event.persisted) {
+				await InjectedUI.init({
+					onConfirm: (action, domain) => {
+						this.#handleConfirmAction(action, domain);
+					},
+					onRevealToggle: (isRevealMode) => {
+						this.#handleRevealToggle(isRevealMode, true);
+					},
+					onOpenOptions: () => {
+						browser.runtime
+							.sendMessage({ action: 'openOptionsPage' })
+							.catch(console.error);
+					},
+				});
+
+				document.body.classList.toggle('qf-reveal-mode', this.#isRevealMode);
+				this.#setupCleanupHook();
+				this.#setupTargetedObserver();
+				this.#processDOM(true);
+			}
+		});
+	}
+
+	/**
+	 * Loads previously resolved domains from sessionStorage synchronously.
+	 * @private
+	 * @returns {void} Returns nothing.
+	 */
+	#loadSessionCache() {
+		try {
+			const cachedData = sessionStorage.getItem('qf_domain_cache');
+
+			if (cachedData) {
+				const parsed = JSON.parse(cachedData);
+
+				for (const [domain, sources] of Object.entries(parsed)) {
+					this.#domainStatusCache.set(domain, sources);
+				}
+			}
+		} catch (error) {
+			console.warn('[Qwant Filter] Failed to parse sessionStorage cache', error);
+		}
+	}
+
+	/**
+	 * Saves the current domain cache to sessionStorage.
+	 * @private
+	 * @returns {void} Returns nothing.
+	 */
+	#saveSessionCache() {
+		try {
+			const cacheObject = Object.fromEntries(this.#domainStatusCache);
+			sessionStorage.setItem('qf_domain_cache', JSON.stringify(cacheObject));
+		} catch (error) {
+			console.warn('[Qwant Filter] Failed to save to sessionStorage', error);
+		}
 	}
 
 	/**
@@ -285,6 +346,8 @@ class AppController {
 				this.#domainStatusCache.set(domain, sources);
 			}
 
+			this.#saveSessionCache();
+
 			return true;
 		} catch (error) {
 			console.error('[Qwant Filter] Failed to query background script:', error);
@@ -355,13 +418,8 @@ class AppController {
 	 * @returns {Promise<void>} Resolves when state and storage are updated.
 	 */
 	async #handleConfirmAction(action, domain) {
-		const syncData = await browser.storage.sync.get({
-			blockedDomains: [],
-			whitelistedDomains: [],
-		});
-
-		let userBlockedDomains = syncData.blockedDomains;
-		let userWhitelistedDomains = syncData.whitelistedDomains;
+		let userBlockedDomains = await StorageUtils.loadList('blockedDomains');
+		let userWhitelistedDomains = await StorageUtils.loadList('whitelistedDomains');
 
 		if (action === 'block') {
 			if (!userBlockedDomains.includes(domain)) {
@@ -375,10 +433,8 @@ class AppController {
 			}
 		}
 
-		await browser.storage.sync.set({
-			blockedDomains: userBlockedDomains,
-			whitelistedDomains: userWhitelistedDomains,
-		});
+		await StorageUtils.saveList('blockedDomains', userBlockedDomains);
+		await StorageUtils.saveList('whitelistedDomains', userWhitelistedDomains);
 	}
 
 	/**

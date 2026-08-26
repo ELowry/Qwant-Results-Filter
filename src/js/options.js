@@ -2,6 +2,7 @@ import { RECOMMENDED_LISTS } from './modules/presets.js';
 import { ListParser } from './modules/utils/parser.js';
 import { UrlUtils } from './modules/utils/url.js';
 import { I18n } from './modules/i18n.js';
+import { StorageUtils } from './modules/utils/storage.js';
 
 /**
  * Controller for the options page interface.
@@ -65,28 +66,28 @@ class OptionsController {
 		this.#setupStorageListeners();
 
 		const syncData = await browser.storage.sync.get({
-			blockedDomains: [],
-			whitelistedDomains: [],
 			revealMode: false,
 			filterLists: [],
 		});
+		const blockedDomains = await StorageUtils.loadList('blockedDomains');
+		const whitelistedDomains = await StorageUtils.loadList('whitelistedDomains');
 
 		this.#revealSwitch.checked = syncData.revealMode;
 		this.#renderDomainList(
-			syncData.blockedDomains,
+			blockedDomains,
 			this.#domainListElement,
 			I18n.getMessage('optionsNoDomainsBlocked'),
 			'blockedDomains'
 		);
 		this.#renderDomainList(
-			syncData.whitelistedDomains,
+			whitelistedDomains,
 			this.#whitelistListElement,
 			I18n.getMessage('optionsNoDomainsWhitelisted'),
 			'whitelistedDomains'
 		);
 		await this.#renderFilterLists(syncData.filterLists);
 		this.#renderPresetsContainer(syncData.filterLists);
-		this.#updateWhitelistVisibility(syncData.blockedDomains, syncData.filterLists);
+		this.#updateWhitelistVisibility(blockedDomains, syncData.filterLists);
 	}
 
 	/**
@@ -148,12 +149,20 @@ class OptionsController {
 	 * @returns {void} Returns nothing.
 	 */
 	#setupStorageListeners() {
-		browser.storage.onChanged.addListener((changes, areaName) => {
+		browser.storage.onChanged.addListener(async (changes, areaName) => {
 			if (areaName === 'sync') {
 				if (changes.revealMode) {
 					this.#revealSwitch.checked = changes.revealMode.newValue;
 				}
 
+				if (changes.filterLists) {
+					const lists = changes.filterLists.newValue || [];
+					this.#renderFilterLists(lists);
+					this.#updatePresetToggles(lists);
+				}
+			}
+
+			if (areaName === 'local') {
 				if (changes.blockedDomains) {
 					this.#renderDomainList(
 						changes.blockedDomains.newValue,
@@ -171,20 +180,15 @@ class OptionsController {
 						'whitelistedDomains'
 					);
 				}
+			}
 
-				if (changes.filterLists) {
-					const lists = changes.filterLists.newValue || [];
-					this.#renderFilterLists(lists);
-					this.#updatePresetToggles(lists);
-				}
-
-				if (changes.blockedDomains || changes.filterLists) {
-					browser.storage.sync
-						.get({ blockedDomains: [], filterLists: [] })
-						.then((data) => {
-							this.#updateWhitelistVisibility(data.blockedDomains, data.filterLists);
-						});
-				}
+			if (
+				(areaName === 'local' && changes.blockedDomains)
+				|| (areaName === 'sync' && changes.filterLists)
+			) {
+				const currentBlocked = await StorageUtils.loadList('blockedDomains');
+				const syncData = await browser.storage.sync.get({ filterLists: [] });
+				this.#updateWhitelistVisibility(currentBlocked, syncData.filterLists);
 			}
 		});
 	}
@@ -308,8 +312,7 @@ class OptionsController {
 			return;
 		}
 
-		const syncData = await browser.storage.sync.get({ [storageKey]: [] });
-		const currentList = syncData[storageKey];
+		const currentList = await StorageUtils.loadList(storageKey);
 		let addedCount = 0;
 
 		for (const hostname of validDomains) {
@@ -320,7 +323,7 @@ class OptionsController {
 		}
 
 		if (addedCount > 0) {
-			await browser.storage.sync.set({ [storageKey]: currentList });
+			await StorageUtils.saveList(storageKey, currentList);
 
 			if (validDomains.length === 1) {
 				this.#showToast(I18n.getMessage('toastDomainAddedSingle', validDomains[0]));
@@ -457,13 +460,11 @@ class OptionsController {
 		try {
 			const url = new URL(urlString);
 
-			// Convert github.com blob links to raw.githubusercontent.com
 			if (url.hostname === 'github.com' && url.pathname.includes('/blob/')) {
 				url.hostname = 'raw.githubusercontent.com';
 				url.pathname = url.pathname.replace('/blob/', '/');
 			}
 
-			// Strip /refs/heads/ from paths so both formats match identically
 			if (url.pathname.includes('/refs/heads/')) {
 				url.pathname = url.pathname.replace('/refs/heads/', '/');
 			}
@@ -494,7 +495,6 @@ class OptionsController {
 			}
 		}
 
-		// If all checked parts are identical, the shorter domain (parent) comes first
 		return partsA.length - partsB.length;
 	}
 
@@ -635,7 +635,7 @@ class OptionsController {
 	 */
 	async #removeDomain(domain, currentList, storageKey) {
 		const updatedList = currentList.filter((d) => d !== domain);
-		await browser.storage.sync.set({ [storageKey]: updatedList });
+		await StorageUtils.saveList(storageKey, updatedList);
 	}
 
 	/**
@@ -745,6 +745,15 @@ class OptionsController {
 	 */
 	async #handleExport() {
 		const syncData = await browser.storage.sync.get(null);
+		syncData.blockedDomains = await StorageUtils.loadList('blockedDomains');
+		syncData.whitelistedDomains = await StorageUtils.loadList('whitelistedDomains');
+
+		for (const key of Object.keys(syncData)) {
+			if (key.includes('_chunks') || key.match(/_\d+$/)) {
+				delete syncData[key];
+			}
+		}
+
 		const jsonString = JSON.stringify(syncData, null, '\t');
 		const blob = new Blob([jsonString], { type: 'application/json' });
 		const url = URL.createObjectURL(blob);
@@ -785,7 +794,20 @@ class OptionsController {
 					return;
 				}
 
-				await browser.storage.sync.set(dataToSet);
+				if (dataToSet.blockedDomains) {
+					await StorageUtils.saveList('blockedDomains', dataToSet.blockedDomains);
+					delete dataToSet.blockedDomains;
+				}
+
+				if (dataToSet.whitelistedDomains) {
+					await StorageUtils.saveList('whitelistedDomains', dataToSet.whitelistedDomains);
+					delete dataToSet.whitelistedDomains;
+				}
+
+				if (Object.keys(dataToSet).length > 0) {
+					await browser.storage.sync.set(dataToSet);
+				}
+
 				this.#showToast(I18n.getMessage('toastSettingsImported'));
 			} catch (error) {
 				console.error('[Qwant Filter] Import parsing error:', error);

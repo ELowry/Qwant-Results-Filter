@@ -209,3 +209,19 @@ body.qf-reveal-mode .qf-hidden-result > *:not(.qf-block-button) {
 	height: var(--size-500);
 	color: var(--color-icon-brand-primary);
 }
+
+/* Temporarily hide unprocessed results to mask background resolution delay */
+[domain]:not([data-qf-processed='true']),
+a.external:not([data-qf-processed='true']),
+a[data-testid='imageResult']:not([data-qf-processed='true']),
+[data-testid='videosList'] > a:not([data-qf-processed='true']),
+a[data-testid='newsCardSerp']:not([data-qf-processed='true']) {
+	opacity: 0;
+	animation: qf-delay-fade var(--motion-duration-200) var(--motion-ease) 100ms forwards;
+}
+
+@keyframes qf-delay-fade {
+	to {
+		opacity: 1;
+	}
+}

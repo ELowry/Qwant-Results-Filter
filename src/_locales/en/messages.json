@@ -351,8 +351,28 @@
 		"message": "Block",
 		"description": "Button text to block a domain directly from a search result."
 	},
+	"actionBlockAria": {
+		"message": "Block $DOMAIN$",
+		"description": "Accessibility label to block a specific domain.",
+		"placeholders": {
+			"domain": {
+				"content": "$1",
+				"example": "example.com"
+			}
+		}
+	},
 	"actionUnblock": {
 		"message": "Unblock",
 		"description": "Button text to unblock a domain directly from a search result."
+	},
+	"actionUnblockAria": {
+		"message": "Unblock $DOMAIN$",
+		"description": "Accessibility label to unblock a specific domain.",
+		"placeholders": {
+			"domain": {
+				"content": "$1",
+				"example": "example.com"
+			}
+		}
 	}
 }

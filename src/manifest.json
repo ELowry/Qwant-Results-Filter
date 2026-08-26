@@ -34,6 +34,7 @@
 			"resources": [
 				"js/appController.js",
 				"js/modules/utils/url.js",
+				"js/modules/utils/storage.js",
 				"js/modules/presets.js",
 				"js/modules/injectedUI.js",
 				"js/modules/i18n.js",

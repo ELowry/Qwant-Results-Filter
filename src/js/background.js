@@ -1,5 +1,6 @@
 import { FilterTrie } from './modules/filterTrie.js';
 import { ListParser } from './modules/utils/parser.js';
+import { StorageUtils } from './modules/utils/storage.js';
 
 /**
  * Background controller for managing the unified Filter Trie and responding to tab queries.
@@ -32,14 +33,10 @@ class BackgroundController {
 	 * @returns {Promise<void>} Resolves when storage is loaded and the Trie is built.
 	 */
 	async #initializeState() {
-		const syncData = await browser.storage.sync.get({
-			blockedDomains: [],
-			whitelistedDomains: [],
-		});
+		this.#userBlockedDomains = await StorageUtils.loadList('blockedDomains');
+		this.#userWhitelistedDomains = await StorageUtils.loadList('whitelistedDomains');
 		const localData = await browser.storage.local.get({ filterListCache: {} });
 
-		this.#userBlockedDomains = syncData.blockedDomains || [];
-		this.#userWhitelistedDomains = syncData.whitelistedDomains || [];
 		this.#cachedListDomains = localData.filterListCache || {};
 
 		this.#rebuildTrie();
@@ -84,7 +81,7 @@ class BackgroundController {
 
 		browser.runtime.onConnect.addListener((port) => {
 			if (port.name === 'qf-cleanup-port') {
-				// Used to handle cleanup when the extension is disabled or removed.
+				// Extension context lifecycle hook handled internally.
 			}
 		});
 	}
@@ -95,20 +92,29 @@ class BackgroundController {
 	 * @returns {void} Returns nothing.
 	 */
 	#setupStorageListener() {
-		browser.storage.onChanged.addListener((changes, areaName) => {
+		browser.storage.onChanged.addListener(async (changes, areaName) => {
 			let needsRebuild = false;
 
 			if (areaName === 'sync') {
-				if (changes.blockedDomains) {
-					this.#userBlockedDomains = changes.blockedDomains.newValue || [];
-					needsRebuild = true;
+				if (changes.blockedDomains_chunks) {
+					await StorageUtils.pullFromSync('blockedDomains');
 				}
-				if (changes.whitelistedDomains) {
-					this.#userWhitelistedDomains = changes.whitelistedDomains.newValue || [];
+
+				if (changes.whitelistedDomains_chunks) {
+					await StorageUtils.pullFromSync('whitelistedDomains');
 				}
 			}
 
 			if (areaName === 'local') {
+				if (changes.blockedDomains) {
+					this.#userBlockedDomains = changes.blockedDomains.newValue || [];
+					needsRebuild = true;
+				}
+
+				if (changes.whitelistedDomains) {
+					this.#userWhitelistedDomains = changes.whitelistedDomains.newValue || [];
+				}
+
 				if (changes.filterListCache) {
 					this.#cachedListDomains = changes.filterListCache.newValue || {};
 					needsRebuild = true;
