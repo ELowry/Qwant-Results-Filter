@@ -24,7 +24,6 @@ class BackgroundController {
 		this.#setupMessageListener();
 		this.#setupStorageListener();
 		this.#setupActionListener();
-		this.#setupAlarms();
 	}
 
 	/**
@@ -38,6 +37,8 @@ class BackgroundController {
 		const localData = await browser.storage.local.get({ filterListCache: {} });
 
 		this.#cachedListDomains = localData.filterListCache || {};
+
+		await this.#setupAlarms();
 
 		this.#rebuildTrie();
 	}
@@ -76,12 +77,6 @@ class BackgroundController {
 
 			if (message.action === 'openOptionsPage') {
 				browser.runtime.openOptionsPage().catch(console.error);
-			}
-		});
-
-		browser.runtime.onConnect.addListener((port) => {
-			if (port.name === 'qf-cleanup-port') {
-				// Extension context lifecycle hook handled internally.
 			}
 		});
 	}
@@ -185,8 +180,11 @@ class BackgroundController {
 	 * @private
 	 * @returns {void} Returns nothing.
 	 */
-	#setupAlarms() {
-		browser.alarms.create('update-filter-lists', { periodInMinutes: 1440 });
+	async #setupAlarms() {
+		const existingAlarm = await browser.alarms.get('update-filter-lists');
+		if (!existingAlarm) {
+			browser.alarms.create('update-filter-lists', { periodInMinutes: 1440 });
+		}
 
 		browser.alarms.onAlarm.addListener((alarm) => {
 			if (alarm.name === 'update-filter-lists') {

@@ -12,6 +12,7 @@ class OptionsController {
 	#filterListElement;
 	#revealSwitch;
 	#urlInput;
+	#addListForm;
 	#addListButton;
 	#presetsContainer;
 	#togglePresetsButton;
@@ -37,6 +38,7 @@ class OptionsController {
 		this.#filterListElement = document.getElementById('options-filter-lists');
 		this.#revealSwitch = document.getElementById('options-reveal-switch');
 		this.#urlInput = document.getElementById('qf-list-input');
+		this.#addListForm = document.getElementById('qf-add-list-form');
 		this.#addListButton = document.getElementById('qf-add-list-button');
 		this.#presetsContainer = document.getElementById('qf-presets-container');
 		this.#togglePresetsButton = document.getElementById('qf-toggle-presets-button');
@@ -116,7 +118,8 @@ class OptionsController {
 			this.#updatePresetsButtonLabel();
 		});
 
-		this.#addListButton.addEventListener('click', () => {
+		this.#addListForm.addEventListener('submit', (event) => {
+			event.preventDefault();
 			this.#handleAddListSubmit();
 		});
 

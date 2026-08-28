@@ -12,7 +12,7 @@ class StorageUtilsController {
 	 * @returns {number} Maximum array items per chunk.
 	 */
 	static get CHUNK_SIZE() {
-		return 200;
+		return 120;
 	}
 
 	/**

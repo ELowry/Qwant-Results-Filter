@@ -72,7 +72,6 @@ class AppController {
 			}
 		});
 
-		this.#setupCleanupHook();
 		this.#setupTargetedObserver();
 		this.#processDOM(false);
 
@@ -93,7 +92,6 @@ class AppController {
 				});
 
 				document.body.classList.toggle('qf-reveal-mode', this.#isRevealMode);
-				this.#setupCleanupHook();
 				this.#setupTargetedObserver();
 				this.#processDOM(true);
 			}
@@ -350,6 +348,11 @@ class AppController {
 
 			return true;
 		} catch (error) {
+			if (error.message && error.message.includes('Extension context invalidated')) {
+				this.#cleanup();
+				return false;
+			}
+
 			console.error('[Qwant Filter] Failed to query background script:', error);
 			return false;
 		}
@@ -491,26 +494,6 @@ class AppController {
 			delete result.dataset.qfHostname;
 			delete result.dataset.qfSkip;
 		}
-	}
-
-	/**
-	 * Establishes a long-lived connection to detect extension unloads or updates.
-	 * @private
-	 * @returns {void} Returns nothing.
-	 */
-	#setupCleanupHook() {
-		const port = browser.runtime.connect({ name: 'qf-cleanup-port' });
-
-		port.onDisconnect.addListener(() => {
-			try {
-				// False if the extension was disabled or updated, true when the background worker has been suspended because the page was idling.
-				if (browser.runtime.id) {
-					return;
-				}
-			} catch (error) {}
-
-			this.#cleanup();
-		});
 	}
 }
 
