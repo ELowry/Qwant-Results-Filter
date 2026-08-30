@@ -17,7 +17,7 @@ class UrlUtilsController {
 			return null;
 		}
 
-		let hostname = null;
+		let hostname;
 
 		try {
 			hostname = new URL(urlString).hostname;

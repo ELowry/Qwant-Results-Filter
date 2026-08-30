@@ -316,7 +316,7 @@ class AppController {
 
 		const hostnamesToCheck = new Set();
 		const validElements = [];
-        
+
 		const searchParams = new URLSearchParams(window.location.search);
 		const isVideoTab = searchParams.get('t') === 'videos';
 
@@ -361,10 +361,10 @@ class AppController {
 				hostname = UrlUtils.extractHostname(rawUrl);
 
 				if (
-					!hostname || 
-					hostname === 'www.qwant.com' || 
-					hostname === 'qwant.com' ||
-					(isVideoTab && (hostname === 'youtube.com' || hostname === 'youtu.be'))
+					!hostname
+					|| hostname === 'www.qwant.com'
+					|| hostname === 'qwant.com'
+					|| (isVideoTab && (hostname === 'youtube.com' || hostname === 'youtu.be'))
 				) {
 					result.dataset.qfProcessed = 'true';
 					result.dataset.qfSkip = 'true';
@@ -472,6 +472,10 @@ class AppController {
 		if (InjectedUI.isQuickSettingsOpen) {
 			InjectedUI.updateQuickSettingsModal(this.#activeBlockedDetails, this.#isRevealMode);
 		}
+
+		Logger.debug(
+			`DOM update complete. Hidden: ${this.#lastHiddenCount} / Total Valid Results: ${this.#lastTotalCount}`
+		);
 	}
 
 	/**

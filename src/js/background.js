@@ -236,15 +236,20 @@ class BackgroundController {
 	 * @returns {Promise<void>} Resolves when all lists are updated and saved.
 	 */
 	async #refreshFilterLists() {
+		Logger.info('Starting scheduled background refresh of filter lists...');
 		const syncData = await browser.storage.sync.get({ filterLists: [] });
 		const localData = await browser.storage.local.get({ filterListCache: {} });
 		let cacheUpdated = false;
 
 		for (const list of syncData.filterLists) {
 			try {
+				Logger.debug(`Fetching update for: ${list.url}`);
 				const response = await fetch(list.url);
 
 				if (!response.ok) {
+					Logger.warn(
+						`Background update failed for ${list.url}: HTTP ${response.status}`
+					);
 					continue;
 				}
 
@@ -254,9 +259,16 @@ class BackgroundController {
 				if (domains.blocked.length > 0 || domains.whitelisted.length > 0) {
 					localData.filterListCache[list.url] = domains;
 					cacheUpdated = true;
+					Logger.debug(
+						`Successfully updated cache for ${list.url} (${domains.blocked.length} blocked)`
+					);
+				} else {
+					Logger.warn(
+						`Fetched list ${list.url} but parsed 0 domains. Cache not updated.`
+					);
 				}
 			} catch (error) {
-				console.warn(`[Qwant Filter] Background update failed for ${list.url}`);
+				Logger.error(`Background update error for ${list.url}:`, error);
 			}
 		}
 
@@ -264,6 +276,9 @@ class BackgroundController {
 			await browser.storage.local.set({
 				filterListCache: localData.filterListCache,
 			});
+			Logger.info('Background refresh complete. Storage updated.');
+		} else {
+			Logger.info('Background refresh complete. No cache changes needed.');
 		}
 	}
 }

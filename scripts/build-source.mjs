@@ -1,5 +1,5 @@
 import { execSync } from 'node:child_process';
-import { readFileSync, mkdirSync } from 'node:fs';
+import { mkdirSync, readFileSync } from 'node:fs';
 
 try {
 	const gitStatus = execSync('git status --porcelain').toString().trim();

@@ -1,3 +1,5 @@
+import { Logger } from './logger.js';
+
 /**
  * Utility controller for parsing filter lists.
  */
@@ -47,6 +49,10 @@ class ListParserController {
 				}
 			}
 		}
+
+		Logger.debug(
+			`Parsed list: ${blockedDomains.size} blocked, ${whitelistedDomains.size} whitelisted domains.`
+		);
 
 		return {
 			blocked: Array.from(blockedDomains),

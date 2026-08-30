@@ -144,7 +144,7 @@ class InjectedUIController {
 
 		if (activeBlockedDetails.length === 0) {
 			const isVideoTab = new URLSearchParams(window.location.search).get('t') === 'videos';
-			
+
 			if (isVideoTab) {
 				header.textContent = I18n.getMessage('quickSettingsNoBlockedDomainsVideo');
 			} else {
