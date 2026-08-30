@@ -13,7 +13,7 @@ This extension operates entirely locally within your browser. There are no analy
 Your settings (manually blocked domains, whitelists, and UI preferences) are:
 
 - Saved locally on your device using the `browser.storage.local` Firefox API.
-- If you use a Mozilla/Firefox account with Sync enabled, your settings will seamlessly sync across your devices via Mozilla's servers using the `browser.storage.sync` API.
+- If you use a Mozilla/Firefox account with Sync enabled, your settings will seamlessly sync across your devices via Mozilla's servers using the `browser.storage.sync` Firefox API.
 
 ## Network Activity (Filter Lists)
 
