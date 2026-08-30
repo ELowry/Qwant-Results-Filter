@@ -11,7 +11,9 @@ class AppController {
 	#activeBlockedDetails;
 	#isRevealMode;
 	#observer;
+	#bodyObserver;
 	#debounceTimer;
+	#spaMonitorTimer;
 	#lastHiddenCount;
 	#lastTotalCount;
 
@@ -23,7 +25,9 @@ class AppController {
 		this.#activeBlockedDetails = [];
 		this.#isRevealMode = false;
 		this.#observer = null;
+		this.#bodyObserver = null;
 		this.#debounceTimer = null;
+		this.#spaMonitorTimer = null;
 		this.#lastHiddenCount = 0;
 		this.#lastTotalCount = 0;
 
@@ -68,12 +72,33 @@ class AppController {
 				|| (areaName === 'local' && changes.filterListCache)
 			) {
 				this.#domainStatusCache.clear();
-				this.#processDOM(true);
+				this.#processDOM(true).catch(console.error);
 			}
 		});
 
 		this.#setupTargetedObserver();
-		this.#processDOM(false);
+		this.#processDOM(false).catch(console.error);
+
+		window.addEventListener('popstate', async () => {
+			await InjectedUI.init({
+				onConfirm: (action, domain) => {
+					this.#handleConfirmAction(action, domain);
+				},
+				onRevealToggle: (isRevealMode) => {
+					this.#handleRevealToggle(isRevealMode, true);
+				},
+				onOpenOptions: () => {
+					browser.runtime.sendMessage({ action: 'openOptionsPage' }).catch(console.error);
+				},
+			});
+
+			document.body.classList.toggle('qf-reveal-mode', this.#isRevealMode);
+
+			setTimeout(() => {
+				this.#setupTargetedObserver();
+				this.#processDOM(true).catch(console.error);
+			}, AppController.DEBOUNCE_MS);
+		});
 
 		window.addEventListener('pageshow', async (event) => {
 			if (event.persisted) {
@@ -93,7 +118,7 @@ class AppController {
 
 				document.body.classList.toggle('qf-reveal-mode', this.#isRevealMode);
 				this.#setupTargetedObserver();
-				this.#processDOM(true);
+				this.#processDOM(true).catch(console.error);
 			}
 		});
 	}
@@ -139,6 +164,18 @@ class AppController {
 	 * @returns {void} Returns nothing.
 	 */
 	#setupTargetedObserver() {
+		if (this.#observer) {
+			this.#observer.disconnect();
+		}
+
+		if (this.#bodyObserver) {
+			this.#bodyObserver.disconnect();
+		}
+
+		if (this.#spaMonitorTimer) {
+			clearInterval(this.#spaMonitorTimer);
+		}
+
 		const applyObserver = (targetElement) => {
 			this.#observer = new MutationObserver(() => {
 				if (this.#debounceTimer) {
@@ -154,6 +191,16 @@ class AppController {
 				childList: true,
 				subtree: true,
 			});
+
+			this.#spaMonitorTimer = setInterval(() => {
+				const currentMain = document.getElementById('main-content');
+				if (currentMain !== targetElement) {
+					this.#setupTargetedObserver();
+					if (currentMain) {
+						this.#processDOM(true);
+					}
+				}
+			}, 500);
 		};
 
 		const existingMainContent = document.getElementById('main-content');
@@ -163,16 +210,17 @@ class AppController {
 			return;
 		}
 
-		const bodyObserver = new MutationObserver((_mutations, obs) => {
+		this.#bodyObserver = new MutationObserver((_mutations, obs) => {
 			const delayedMainContent = document.getElementById('main-content');
 
 			if (delayedMainContent) {
 				obs.disconnect();
 				applyObserver(delayedMainContent);
+				this.#processDOM(true).catch(console.error);
 			}
 		});
 
-		bodyObserver.observe(document.body, {
+		this.#bodyObserver.observe(document.body, {
 			childList: true,
 			subtree: true,
 		});
@@ -472,8 +520,16 @@ class AppController {
 			this.#observer.disconnect();
 		}
 
+		if (this.#bodyObserver) {
+			this.#bodyObserver.disconnect();
+		}
+
 		if (this.#debounceTimer) {
 			clearTimeout(this.#debounceTimer);
+		}
+
+		if (this.#spaMonitorTimer) {
+			clearInterval(this.#spaMonitorTimer);
 		}
 
 		document.body.classList.remove('qf-reveal-mode');
