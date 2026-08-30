@@ -59,7 +59,9 @@ class AppController {
 				this.#handleRevealToggle(isRevealMode, true);
 			},
 			onOpenOptions: () => {
-				browser.runtime.sendMessage({ action: 'openOptionsPage' }).catch((err) => Logger.error(err));
+				browser.runtime
+					.sendMessage({ action: 'openOptionsPage' })
+					.catch((err) => Logger.error(err));
 			},
 		});
 
@@ -89,7 +91,9 @@ class AppController {
 					this.#handleRevealToggle(isRevealMode, true);
 				},
 				onOpenOptions: () => {
-					browser.runtime.sendMessage({ action: 'openOptionsPage' }).catch((err) => Logger.error(err));
+					browser.runtime
+						.sendMessage({ action: 'openOptionsPage' })
+						.catch((err) => Logger.error(err));
 				},
 			});
 
