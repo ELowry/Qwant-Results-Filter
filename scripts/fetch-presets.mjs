@@ -82,7 +82,18 @@ class PresetFetcher {
 			return true;
 		}
 
-		if (subscriptionUrl.includes('pgl.yoyo.org') || fullName.includes('Peter Lowe')) {
+		let host = '';
+		try {
+			host = new URL(subscriptionUrl).hostname;
+		} catch {
+			// Parse error
+		}
+
+		if (
+			host === 'pgl.yoyo.org'
+			|| host.endsWith('.pgl.yoyo.org')
+			|| fullName.includes('Peter Lowe')
+		) {
 			return true;
 		}
 
