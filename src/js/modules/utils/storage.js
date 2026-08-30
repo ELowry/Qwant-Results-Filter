@@ -27,6 +27,9 @@ class StorageUtilsController {
 		Logger.debug(`Saving list ${key} with ${dataArray.length} items.`);
 		await browser.storage.local.set({ [key]: dataArray });
 
+		const meta = await browser.storage.sync.get(`${key}_chunks`);
+		const oldChunkCount = meta[`${key}_chunks`] || 0;
+
 		const chunks = [];
 
 		for (let i = 0; i < dataArray.length; i += StorageUtilsController.CHUNK_SIZE) {
@@ -41,6 +44,17 @@ class StorageUtilsController {
 
 		try {
 			await browser.storage.sync.set(syncObject);
+
+			const keysToRemove = [];
+
+			for (let i = chunks.length; i < oldChunkCount; i++) {
+				keysToRemove.push(`${key}_${i}`);
+			}
+
+			if (keysToRemove.length > 0) {
+				await browser.storage.sync.remove(keysToRemove);
+			}
+
 			Logger.debug(`List ${key} successfully synced across ${chunks.length} chunks.`);
 		} catch (error) {
 			Logger.warn(`Sync quota exceeded for ${key}. Falling back to local only.`);
