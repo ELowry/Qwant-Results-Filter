@@ -820,7 +820,7 @@ class OptionsController {
 
 				this.#showToast(I18n.getMessage('toastSettingsImported'));
 			} catch (error) {
-				console.error('[Qwant Filter] Import parsing error:', error);
+				Logger.error('Import parsing error:', error);
 				this.#showToast(I18n.getMessage('toastImportParseError'));
 			} finally {
 				event.target.value = '';

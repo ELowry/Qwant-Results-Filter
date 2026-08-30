@@ -59,7 +59,7 @@ class AppController {
 				this.#handleRevealToggle(isRevealMode, true);
 			},
 			onOpenOptions: () => {
-				browser.runtime.sendMessage({ action: 'openOptionsPage' }).catch(console.error);
+				browser.runtime.sendMessage({ action: 'openOptionsPage' }).catch((err) => Logger.error(err));
 			},
 		});
 
@@ -73,12 +73,12 @@ class AppController {
 				|| (areaName === 'local' && changes.filterListCache)
 			) {
 				this.#domainStatusCache.clear();
-				this.#processDOM(true).catch(console.error);
+				this.#processDOM(true).catch((err) => Logger.error(err));
 			}
 		});
 
 		this.#setupTargetedObserver();
-		this.#processDOM(false).catch(console.error);
+		this.#processDOM(false).catch((err) => Logger.error(err));
 
 		window.addEventListener('popstate', async () => {
 			await InjectedUI.init({
@@ -89,7 +89,7 @@ class AppController {
 					this.#handleRevealToggle(isRevealMode, true);
 				},
 				onOpenOptions: () => {
-					browser.runtime.sendMessage({ action: 'openOptionsPage' }).catch(console.error);
+					browser.runtime.sendMessage({ action: 'openOptionsPage' }).catch((err) => Logger.error(err));
 				},
 			});
 
@@ -97,7 +97,7 @@ class AppController {
 
 			setTimeout(() => {
 				this.#setupTargetedObserver();
-				this.#processDOM(true).catch(console.error);
+				this.#processDOM(true).catch((err) => Logger.error(err));
 			}, AppController.DEBOUNCE_MS);
 		});
 
@@ -113,13 +113,13 @@ class AppController {
 					onOpenOptions: () => {
 						browser.runtime
 							.sendMessage({ action: 'openOptionsPage' })
-							.catch(console.error);
+							.catch((err) => Logger.error(err));
 					},
 				});
 
 				document.body.classList.toggle('qf-reveal-mode', this.#isRevealMode);
 				this.#setupTargetedObserver();
-				this.#processDOM(true).catch(console.error);
+				this.#processDOM(true).catch((err) => Logger.error(err));
 			}
 		});
 	}
@@ -218,7 +218,7 @@ class AppController {
 			if (delayedMainContent) {
 				obs.disconnect();
 				applyObserver(delayedMainContent);
-				this.#processDOM(true).catch(console.error);
+				this.#processDOM(true).catch((err) => Logger.error(err));
 			}
 		});
 

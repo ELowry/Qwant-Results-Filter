@@ -165,7 +165,7 @@ class BackgroundController {
 	 */
 	#setupActionListener() {
 		browser.action.onClicked.addListener(() => {
-			browser.runtime.openOptionsPage().catch(console.error);
+			browser.runtime.openOptionsPage().catch((err) => Logger.error(err));
 		});
 	}
 
