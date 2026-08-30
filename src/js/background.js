@@ -109,6 +109,11 @@ class BackgroundController {
 			if (message.action === 'openOptionsPage') {
 				browser.runtime.openOptionsPage().catch((err) => Logger.error(err));
 			}
+
+			if (message.action === 'forceListRefresh') {
+				Logger.info('Manual list refresh triggered via message.');
+				this.#refreshFilterLists().catch((err) => Logger.error(err));
+			}
 		});
 	}
 
@@ -240,6 +245,15 @@ class BackgroundController {
 		const syncData = await browser.storage.sync.get({ filterLists: [] });
 		const localData = await browser.storage.local.get({ filterListCache: {} });
 		let cacheUpdated = false;
+
+		const activeUrls = new Set(syncData.filterLists.map((l) => l.url));
+		for (const cachedUrl of Object.keys(localData.filterListCache)) {
+			if (!activeUrls.has(cachedUrl)) {
+				delete localData.filterListCache[cachedUrl];
+				cacheUpdated = true;
+				Logger.debug(`Pruned orphaned cache for removed list: ${cachedUrl}`);
+			}
+		}
 
 		for (const list of syncData.filterLists) {
 			try {

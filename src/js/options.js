@@ -814,6 +814,10 @@ class OptionsController {
 					await browser.storage.sync.set(dataToSet);
 				}
 
+				if (dataToSet.filterLists && dataToSet.filterLists.length > 0) {
+					browser.runtime.sendMessage({ action: 'forceListRefresh' });
+				}
+
 				this.#showToast(I18n.getMessage('toastSettingsImported'));
 			} catch (error) {
 				console.error('[Qwant Filter] Import parsing error:', error);
