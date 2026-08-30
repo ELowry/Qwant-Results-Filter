@@ -64,12 +64,12 @@ jobs:
               id: mode
               run: |
                   if [[ "${{ github.ref_name }}" == *"-beta"* ]] || [[ "${{ github.ref_name }}" == *"-"* ]]; then
-                    echo "IS_BETA=true" >> $GITHUB_ENV
-                    echo "IS_PRERELEASE=true" >> $GITHUB_ENV
+                    echo "is_beta=true" >> $GITHUB_OUTPUT
+                    echo "is_prerelease=true" >> $GITHUB_OUTPUT
                     echo "::notice::Beta/Pre-release tag detected. Skipping AMO Listed submission."
                   else
-                    echo "IS_BETA=false" >> $GITHUB_ENV
-                    echo "IS_PRERELEASE=false" >> $GITHUB_ENV
+                    echo "is_beta=false" >> $GITHUB_OUTPUT
+                    echo "is_prerelease=false" >> $GITHUB_OUTPUT
                     echo "::notice::Stable release tag detected. Submitting to AMO Listed & Unlisted."
                   fi
 
@@ -80,7 +80,9 @@ jobs:
               run: npm run build:source
 
             - name: Submit Listed to AMO
-              if: env.IS_BETA == 'false'
+              id: submit_amo
+              if: steps.mode.outputs.is_beta == 'false'
+              continue-on-error: true
               env:
                   WEB_EXT_API_KEY: ${{ secrets.WEB_EXT_API_KEY }}
                   WEB_EXT_API_SECRET: ${{ secrets.WEB_EXT_API_SECRET }}
@@ -128,15 +130,25 @@ jobs:
 
                   echo -e "\n\n**Full Changelog:** https://github.com/${{ github.repository }}/compare/${PREV_TAG}...${{ github.ref_name }}" >> generated_notes.txt
 
+            - name: Determine Release Title
+              id: release_title
+              run: |
+                  if [ "${{ steps.submit_amo.outcome }}" == "failure" ]; then
+                    echo "title=⚠️ AMO FAILED ${{ github.ref_name }}" >> $GITHUB_OUTPUT
+                  else
+                    echo "title=${{ github.ref_name }}" >> $GITHUB_OUTPUT
+                  fi
+
             - name: Create GitHub Release
               id: create_release
               uses: softprops/action-gh-release@v3
               with:
+                  name: ${{ steps.release_title.outputs.title }}
                   files: |
                       dist/*-source.zip
                       dist/*.xpi
                   draft: true
-                  prerelease: ${{ env.IS_PRERELEASE == 'true' }}
+                  prerelease: ${{ steps.mode.outputs.is_prerelease == 'true' }}
                   body_path: generated_notes.txt
               env:
                   GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
