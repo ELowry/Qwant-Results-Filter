@@ -35,10 +35,18 @@ class ListParserController {
 			}
 
 			line = line.replace(/^(?:0\.0\.0\.0|127\.0\.0\.1)\s+/, '');
-			let host = line.replace(/^(\*|https?):\/\/(?:\*\.)?/, '');
-			host = host.split('/')[0];
-			host = host.replace(/^\*\./, '');
 
+			let hostAndPath = line.replace(/^(\*|https?):\/\/(?:\*\.)?/, '');
+
+			if (hostAndPath.includes('/')) {
+				const pathPart = hostAndPath.substring(hostAndPath.indexOf('/'));
+				if (pathPart !== '/' && pathPart !== '/*') {
+					continue;
+				}
+			}
+
+			let host = hostAndPath.split('/')[0];
+			host = host.replace(/^\*\./, '');
 			host = host.replace(/^www\./, '');
 
 			if (host && host.includes('.') && !host.includes(' ')) {

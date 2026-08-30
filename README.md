@@ -20,6 +20,10 @@ Qwant Results Filter puts you back in control of your search results by removing
 - **Custom Whitelists**:  
   Whitelist domains to ensure your favorite sites are never accidentally caught in a filter's crossfire.
 
+> [!NOTE]  
+> **Domain-Level Filtering for Maximum Performance**  
+> To ensure your search results load instantly without scroll lag or CPU spikes, this extension operates strictly at the domain level. Complex, path-specific rules from community lists are ignored.
+
 ## Installation
 
 _Coming Soon_
