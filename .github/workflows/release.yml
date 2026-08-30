@@ -93,9 +93,9 @@ jobs:
                     --api-key $WEB_EXT_API_KEY \
                     --api-secret $WEB_EXT_API_SECRET
 
-            - name: Mutate Manifest Version for Unlisted Build
+            - name: Mutate Manifest ID and Version for Unlisted Build
               run: |
-                  node -e "const fs=require('fs'); const m=require('./src/manifest.json'); m.version += '.${{ github.run_number }}'; fs.writeFileSync('./src/manifest.json', JSON.stringify(m, null, '\t') + '\n');"
+                  node -e "const fs=require('fs'); const m=require('./src/manifest.json'); m.version += '.${{ github.run_attempt }}'; m.browser_specific_settings.gecko.id = 'qwant-filter@eric-lowry.com'; fs.writeFileSync('./src/manifest.json', JSON.stringify(m, null, '\t') + '\n');"
 
             - name: Sign & Download Unlisted XPI
               env:

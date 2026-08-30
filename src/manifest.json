@@ -49,7 +49,7 @@
 	},
 	"browser_specific_settings": {
 		"gecko": {
-			"id": "qwant-filter@eric-lowry.com",
+			"id": "qwant-results-filter@eric-lowry.com",
 			"strict_min_version": "142.0",
 			"data_collection_permissions": {
 				"required": ["none"]
