@@ -1,6 +1,6 @@
 [![License: MIT](https://img.shields.io/badge/License-MIT-3d383b.svg)](LICENSE) [![Latest GitHub release](https://img.shields.io/github/v/release/ELowry/Qwant-Results-Filter?logo=GitHub&color=a4785e)](https://github.com/ELowry/Qwant-Results-Filter/releases/latest)
 
-# Qwant Results Filter
+# [![Qwant Results Filter](logo.png)](#)
 
 Declutter your Qwant search results to find what you're actually looking for.
 
