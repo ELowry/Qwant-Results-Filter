@@ -7,6 +7,8 @@ class InjectedUIController {
 	#pendingDomain;
 	#onConfirmCallback;
 	#onOpenOptionsCallback;
+	#onRevealToggleCallback;
+	#isInitialized;
 
 	/**
 	 * Initializes a new instance of the InjectedUIController.
@@ -15,6 +17,8 @@ class InjectedUIController {
 		this.#pendingDomain = null;
 		this.#onConfirmCallback = null;
 		this.#onOpenOptionsCallback = null;
+		this.#onRevealToggleCallback = null;
+		this.#isInitialized = false;
 	}
 
 	/**
@@ -52,9 +56,15 @@ class InjectedUIController {
 	 */
 	async init({ onConfirm, onRevealToggle, onOpenOptions }) {
 		this.#onConfirmCallback = onConfirm;
+		this.#onRevealToggleCallback = onRevealToggle;
 		this.#onOpenOptionsCallback = onOpenOptions;
-		await this.#injectTemplates();
-		this.#setupEventListeners(onRevealToggle);
+
+		if (!this.#isInitialized) {
+			this.#isInitialized = true;
+
+			await this.#injectTemplates();
+			this.#setupEventListeners();
+		}
 	}
 
 	/**
@@ -291,11 +301,10 @@ class InjectedUIController {
 
 	/**
 	 * Binds event listeners to the injected modals.
-	 * @param {Function} onRevealToggle Callback for reveal mode toggle changes.
 	 * @private
 	 * @returns {void} Returns nothing.
 	 */
-	#setupEventListeners(onRevealToggle) {
+	#setupEventListeners() {
 		const confirmModal = document.getElementById('qf-confirm-modal');
 		const qsModal = document.getElementById('qf-quick-settings-modal');
 
@@ -325,8 +334,8 @@ class InjectedUIController {
 		qsModal.addEventListener('click', handleBackdropClick(qsModal));
 
 		document.getElementById('qf-toggle-reveal-switch').addEventListener('change', (event) => {
-			if (onRevealToggle) {
-				onRevealToggle(event.target.checked);
+			if (this.#onRevealToggleCallback) {
+				this.#onRevealToggleCallback(event.target.checked);
 			}
 		});
 
