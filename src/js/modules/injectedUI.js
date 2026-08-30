@@ -166,10 +166,21 @@ class InjectedUIController {
 			}
 
 			if (!isManual && lists.length > 0) {
-				const sourceSpan = document.createElement('span');
-				sourceSpan.className = 'qf-blocked-domain-source';
-				sourceSpan.textContent = lists.join(', ');
-				info.appendChild(sourceSpan);
+				const sourcesContainer = document.createElement('div');
+				sourcesContainer.className = 'qf-blocked-domain-sources';
+
+				for (const list of lists) {
+					const sourceSpan = document.createElement('span');
+					sourceSpan.className = 'qf-blocked-domain-source';
+					sourceSpan.textContent = list.name;
+
+					sourceSpan.title =
+						list.name !== list.url ? `${list.name}\n${list.url}` : list.url;
+
+					sourcesContainer.appendChild(sourceSpan);
+				}
+
+				info.appendChild(sourcesContainer);
 			}
 
 			if (isManual) {

@@ -112,10 +112,20 @@
 						}
 					}
 
-					.qf-blocked-domain-source {
-						opacity: 0.65;
-						font-size: 0.75rem;
-						word-break: break-all;
+					.qf-blocked-domain-sources {
+						display: flex;
+						flex-direction: column;
+						gap: 2px;
+						overflow: hidden;
+
+						.qf-blocked-domain-source {
+							opacity: 0.65;
+							max-width: 50ch;
+							overflow: hidden;
+							font-size: 0.75rem;
+							text-overflow: ellipsis;
+							white-space: nowrap;
+						}
 					}
 				}
 

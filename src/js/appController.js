@@ -230,7 +230,7 @@ class AppController {
 	 * Resolves a list of filter list URLs to their human-readable preset names.
 	 * @param {Array<string>} sourceIds The subscription list URLs to map.
 	 * @private
-	 * @returns {Array<string>} The mapped display names.
+	 * @returns {Array<{name: string, url: string}>} The mapped display names and URLs.
 	 */
 	#mapSourceNames(sourceIds) {
 		return sourceIds
@@ -240,13 +240,13 @@ class AppController {
 					for (const items of Object.values(RECOMMENDED_LISTS)) {
 						for (const item of items) {
 							if (item.url === url) {
-								return item.name;
+								return { name: item.name, url: url };
 							}
 						}
 					}
 				}
 
-				return url;
+				return { name: url, url: url };
 			});
 	}
 
