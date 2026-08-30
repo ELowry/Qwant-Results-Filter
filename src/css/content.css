@@ -179,7 +179,8 @@ body:not(.qf-reveal-mode) {
 		display: none !important;
 	}
 
-	*:has(> .qf-hidden-result[data-testid='imageResult']) {
+	*:has(> .qf-hidden-result[data-testid='imageResult']),
+	*:has(> .qf-hidden-result[data-testid='webResult']) {
 		display: none !important;
 	}
 }

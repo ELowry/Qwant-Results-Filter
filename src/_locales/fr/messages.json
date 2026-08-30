@@ -247,6 +247,9 @@
 	"quickSettingsNoBlockedDomains": {
 		"message": "Aucun domaine n'est bloqué sur cette page. ✨🧹"
 	},
+	"quickSettingsNoBlockedDomainsVideo": {
+		"message": "Le filtrage vidéo est impossible car Qwant affiche exclusivement des résultats YouTube."
+	},
 	"quickSettingsOpenOptions": {
 		"message": "Ouvrir les paramètres"
 	},

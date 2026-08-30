@@ -316,6 +316,9 @@ class AppController {
 
 		const hostnamesToCheck = new Set();
 		const validElements = [];
+        
+		const searchParams = new URLSearchParams(window.location.search);
+		const isVideoTab = searchParams.get('t') === 'videos';
 
 		for (const result of allRawResults) {
 			if (result.dataset.qfSkip === 'true') {
@@ -357,7 +360,12 @@ class AppController {
 
 				hostname = UrlUtils.extractHostname(rawUrl);
 
-				if (!hostname || hostname === 'www.qwant.com' || hostname === 'qwant.com') {
+				if (
+					!hostname || 
+					hostname === 'www.qwant.com' || 
+					hostname === 'qwant.com' ||
+					(isVideoTab && (hostname === 'youtube.com' || hostname === 'youtu.be'))
+				) {
 					result.dataset.qfProcessed = 'true';
 					result.dataset.qfSkip = 'true';
 					continue;

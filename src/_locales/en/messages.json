@@ -321,6 +321,10 @@
 		"message": "No domains are blocked on this page. ✨🧹",
 		"description": "Message shown when no domains are blocked on the current search results page."
 	},
+	"quickSettingsNoBlockedDomainsVideo": {
+		"message": "Video filtering is unavailable. Qwant exclusively serves YouTube results.",
+		"description": "Message shown on the videos tab when no domains are blocked."
+	},
 	"quickSettingsOpenOptions": {
 		"message": "Open Settings",
 		"description": "Button text in quick settings modal to open full options page."

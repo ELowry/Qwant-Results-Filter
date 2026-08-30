@@ -143,7 +143,13 @@ class InjectedUIController {
 		toggleSwitch.checked = isRevealMode;
 
 		if (activeBlockedDetails.length === 0) {
-			header.textContent = I18n.getMessage('quickSettingsNoBlockedDomains');
+			const isVideoTab = new URLSearchParams(window.location.search).get('t') === 'videos';
+			
+			if (isVideoTab) {
+				header.textContent = I18n.getMessage('quickSettingsNoBlockedDomainsVideo');
+			} else {
+				header.textContent = I18n.getMessage('quickSettingsNoBlockedDomains');
+			}
 			return;
 		}
 
