@@ -1,7 +1,7 @@
 {
 	"manifest_version": 3,
 	"name": "__MSG_extensionName__",
-	"version": "0.3.0",
+	"version": "0.4.0",
 	"description": "__MSG_extensionDescription__",
 	"default_locale": "en",
 	"permissions": ["storage", "alarms"],
@@ -38,6 +38,7 @@
 				"js/modules/presets.js",
 				"js/modules/injectedUI.js",
 				"js/modules/i18n.js",
+				"js/modules/utils/logger.js",
 				"templates/injectedUi.html"
 			],
 			"matches": ["*://*.qwant.com/*"]

@@ -1,5 +1,6 @@
 import { stat, writeFile } from 'fs/promises';
 import { load } from 'js-yaml';
+
 import { ListParser } from '../src/js/modules/utils/parser.js';
 
 /**
@@ -92,22 +93,26 @@ class PresetFetcher {
 	 * Validates that a subscription URL can be fetched and contains valid filter rules.
 	 * @param {string} url The subscription URL to validate.
 	 * @private
-	 * @returns {Promise<boolean>} True if the list is fetchable and yields valid domains.
+	 * @returns {Promise<{isValid: boolean, reason?: string}>} Object containing validation status and optional reason.
 	 */
 	async #validateAndParseList(url) {
 		try {
 			const response = await fetch(url, { signal: AbortSignal.timeout(10000) });
 
 			if (!response.ok) {
-				return false;
+				return { isValid: false, reason: `HTTP ${response.status} ${response.statusText}` };
 			}
 
 			const text = await response.text();
 			const domains = ListParser.parseUBlacklist(text);
 
-			return domains.length > 0;
+			if (domains.blocked.length === 0 && domains.whitelisted.length === 0) {
+				return { isValid: false, reason: 'Parsed list yielded 0 valid domains.' };
+			}
+
+			return { isValid: true };
 		} catch (error) {
-			return false;
+			return { isValid: false, reason: error.message || 'Network or timeout error' };
 		}
 	}
 
@@ -171,15 +176,17 @@ class PresetFetcher {
 
 		const validationResults = await Promise.all(
 			candidates.map(async (candidate) => {
-				const isValid = await this.#validateAndParseList(candidate.url);
+				const result = await this.#validateAndParseList(candidate.url);
 
-				if (!isValid) {
+				if (!result.isValid) {
 					console.warn(
-						`[Qwant Filter] Skipping invalid or unreachable list: ${candidate.name} (${candidate.url})`
+						`[Qwant Filter] ❌ Dropped list: "${candidate.name}"\n`
+							+ `    URL: ${candidate.url}\n`
+							+ `    Reason: ${result.reason}`
 					);
 				}
 
-				return isValid ? candidate : null;
+				return result.isValid ? candidate : null;
 			})
 		);
 

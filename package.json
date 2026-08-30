@@ -1,6 +1,6 @@
 {
 	"name": "qwant-results-filter",
-	"version": "0.3.0",
+	"version": "0.4.0",
 	"type": "module",
 	"main": "AppController.js",
 	"scripts": {
@@ -29,6 +29,7 @@
 		"js-yaml": "^5.4.1",
 		"prettier": "^3.9.6",
 		"prettier-plugin-css-order": "^2.2.0",
+		"@trivago/prettier-plugin-sort-imports": "^6.0.2",
 		"web-ext": "^10.6.0"
 	}
 }

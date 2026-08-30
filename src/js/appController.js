@@ -1,7 +1,8 @@
 import { InjectedUI } from './modules/injectedUI.js';
 import { RECOMMENDED_LISTS } from './modules/presets.js';
-import { UrlUtils } from './modules/utils/url.js';
+import { Logger } from './modules/utils/logger.js';
 import { StorageUtils } from './modules/utils/storage.js';
+import { UrlUtils } from './modules/utils/url.js';
 
 /**
  * Controller for managing Qwant search result filtering and communicating with the background worker.
@@ -138,9 +139,10 @@ class AppController {
 				for (const [domain, sources] of Object.entries(parsed)) {
 					this.#domainStatusCache.set(domain, sources);
 				}
+				Logger.debug(`Loaded ${this.#domainStatusCache.size} domains from session cache.`);
 			}
 		} catch (error) {
-			console.warn('[Qwant Filter] Failed to parse sessionStorage cache', error);
+			Logger.warn('Failed to parse sessionStorage cache', error);
 		}
 	}
 
@@ -154,7 +156,7 @@ class AppController {
 			const cacheObject = Object.fromEntries(this.#domainStatusCache);
 			sessionStorage.setItem('qf_domain_cache', JSON.stringify(cacheObject));
 		} catch (error) {
-			console.warn('[Qwant Filter] Failed to save to sessionStorage', error);
+			Logger.warn('Failed to save to sessionStorage', error);
 		}
 	}
 
@@ -257,6 +259,7 @@ class AppController {
 	 * @returns {Promise<void>} Resolves when the DOM has been updated.
 	 */
 	async #processDOM(forceRecheck) {
+		Logger.debug(`Processing DOM (force: ${forceRecheck})...`);
 		const parsedData = this.#queryAndParseElements(forceRecheck);
 
 		if (parsedData.isEmpty) {
@@ -383,6 +386,7 @@ class AppController {
 		}
 
 		try {
+			Logger.debug(`Resolving ${hostnamesToCheck.size} unverified hostnames...`);
 			const batchResults = await browser.runtime.sendMessage({
 				action: 'checkDomains',
 				domains: Array.from(hostnamesToCheck),
@@ -397,11 +401,12 @@ class AppController {
 			return true;
 		} catch (error) {
 			if (error.message && error.message.includes('Extension context invalidated')) {
+				Logger.warn('Extension context invalidated, cleaning up...');
 				this.#cleanup();
 				return false;
 			}
 
-			console.error('[Qwant Filter] Failed to query background script:', error);
+			Logger.error('Failed to query background script:', error);
 			return false;
 		}
 	}

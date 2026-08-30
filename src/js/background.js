@@ -1,4 +1,5 @@
 import { FilterTrie } from './modules/filterTrie.js';
+import { Logger } from './modules/utils/logger.js';
 import { ListParser } from './modules/utils/parser.js';
 import { StorageUtils } from './modules/utils/storage.js';
 
@@ -9,6 +10,7 @@ class BackgroundController {
 	#userBlockedDomains;
 	#userWhitelistedDomains;
 	#cachedListDomains;
+	#cachedListWhitelistedDomains;
 	#initPromise;
 
 	/**
@@ -18,6 +20,7 @@ class BackgroundController {
 		this.#userBlockedDomains = [];
 		this.#userWhitelistedDomains = [];
 		this.#cachedListDomains = {};
+		this.#cachedListWhitelistedDomains = new Set();
 
 		this.#initPromise = this.#initializeState();
 
@@ -49,19 +52,46 @@ class BackgroundController {
 	 * @returns {void} Returns nothing.
 	 */
 	#rebuildTrie() {
+		Logger.debug('Rebuilding Filter Trie...');
 		FilterTrie.clear();
+		this.#cachedListWhitelistedDomains.clear();
 
+		Logger.debug(`Adding ${this.#userBlockedDomains.length} manual blocks.`);
 		for (const domain of this.#userBlockedDomains) {
 			FilterTrie.add(domain, 'manual');
 		}
 
-		for (const [listUrl, listDomains] of Object.entries(this.#cachedListDomains)) {
-			if (Array.isArray(listDomains)) {
-				for (const domain of listDomains) {
+		let needsRefresh = false;
+
+		for (const [listUrl, listData] of Object.entries(this.#cachedListDomains)) {
+			if (listData && typeof listData === 'object' && !Array.isArray(listData)) {
+				const blocked = listData.blocked || [];
+				const whitelisted = listData.whitelisted || [];
+
+				Logger.debug(
+					`Adding list [${listUrl}] - Blocked: ${blocked.length}, Whitelisted: ${whitelisted.length}`
+				);
+
+				for (const domain of blocked) {
 					FilterTrie.add(domain, listUrl);
 				}
+				for (const domain of whitelisted) {
+					this.#cachedListWhitelistedDomains.add(domain);
+				}
+			} else {
+				Logger.warn(`Invalid or legacy cache detected for ${listUrl}. Dropping it.`);
+				needsRefresh = true;
 			}
 		}
+
+		if (needsRefresh) {
+			Logger.info('Triggering list refresh due to invalid caches...');
+			this.#refreshFilterLists().catch((err) =>
+				Logger.error('List auto-refresh failed:', err)
+			);
+		}
+
+		Logger.info('Filter Trie rebuilt successfully.');
 	}
 
 	/**
@@ -72,11 +102,12 @@ class BackgroundController {
 	#setupMessageListener() {
 		browser.runtime.onMessage.addListener((message, _sender, _sendResponse) => {
 			if (message.action === 'checkDomains') {
+				Logger.debug(`Handling check for ${message.domains.length} domains...`);
 				return this.#handleCheckDomains(message.domains);
 			}
 
 			if (message.action === 'openOptionsPage') {
-				browser.runtime.openOptionsPage().catch(console.error);
+				browser.runtime.openOptionsPage().catch((err) => Logger.error(err));
 			}
 		});
 	}
@@ -167,7 +198,13 @@ class BackgroundController {
 		for (let i = 0; i < parts.length; i++) {
 			const parentDomain = parts.slice(i).join('.');
 
-			if (this.#userWhitelistedDomains.includes(parentDomain)) {
+			if (
+				this.#userWhitelistedDomains.includes(parentDomain)
+				|| this.#cachedListWhitelistedDomains.has(parentDomain)
+			) {
+				Logger.debug(
+					`Domain permitted by whitelist: ${domain} (matched parent: ${parentDomain})`
+				);
 				return true;
 			}
 		}
@@ -214,7 +251,7 @@ class BackgroundController {
 				const text = await response.text();
 				const domains = ListParser.parseUBlacklist(text);
 
-				if (domains.length > 0) {
+				if (domains.blocked.length > 0 || domains.whitelisted.length > 0) {
 					localData.filterListCache[list.url] = domains;
 					cacheUpdated = true;
 				}

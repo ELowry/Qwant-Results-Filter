@@ -1,8 +1,9 @@
-import { RECOMMENDED_LISTS } from './modules/presets.js';
-import { ListParser } from './modules/utils/parser.js';
-import { UrlUtils } from './modules/utils/url.js';
 import { I18n } from './modules/i18n.js';
+import { RECOMMENDED_LISTS } from './modules/presets.js';
+import { Logger } from './modules/utils/logger.js';
+import { ListParser } from './modules/utils/parser.js';
 import { StorageUtils } from './modules/utils/storage.js';
+import { UrlUtils } from './modules/utils/url.js';
 
 /**
  * Controller for the options page interface.
@@ -509,6 +510,7 @@ class OptionsController {
 	 */
 	async #addFilterList(url) {
 		try {
+			Logger.debug(`Fetching new filter list from ${url}...`);
 			const response = await fetch(url, { signal: AbortSignal.timeout(10000) });
 
 			if (!response.ok) {
@@ -516,7 +518,7 @@ class OptionsController {
 			}
 
 			const text = await response.text();
-			const domains = ListParser.parseUBlacklist(text);
+			const parsedData = ListParser.parseUBlacklist(text);
 			const syncData = await browser.storage.sync.get({ filterLists: [] });
 
 			if (!syncData.filterLists.find((l) => l.url === url)) {
@@ -527,14 +529,15 @@ class OptionsController {
 			const localData = await browser.storage.local.get({
 				filterListCache: {},
 			});
-			localData.filterListCache[url] = domains;
+			localData.filterListCache[url] = parsedData;
 			await browser.storage.local.set({
 				filterListCache: localData.filterListCache,
 			});
 
+			Logger.info(`Successfully added and cached list: ${url}`);
 			return true;
 		} catch (error) {
-			console.error('[Qwant Filter] Failed to fetch list:', error);
+			Logger.error('Failed to fetch list:', error);
 			this.#showToast(I18n.getMessage('toastListFetchError'));
 			return false;
 		}
@@ -621,7 +624,7 @@ class OptionsController {
 
 			nameSpan.textContent = domain;
 			button.addEventListener('click', async () => {
-				await this.#removeDomain(domain, domains, storageKey);
+				await this.#removeDomain(domain, storageKey);
 			});
 
 			listElement.appendChild(clone);
@@ -631,12 +634,12 @@ class OptionsController {
 	/**
 	 * Removes a domain from storage.
 	 * @param {string} domain The hostname to remove.
-	 * @param {Array<string>} currentList The array of currently saved hostnames.
 	 * @param {string} storageKey The storage key to update.
 	 * @private
 	 * @returns {Promise<void>} Resolves when the domain is removed.
 	 */
-	async #removeDomain(domain, currentList, storageKey) {
+	async #removeDomain(domain, storageKey) {
+		const currentList = await StorageUtils.loadList(storageKey);
 		const updatedList = currentList.filter((d) => d !== domain);
 		await StorageUtils.saveList(storageKey, updatedList);
 	}

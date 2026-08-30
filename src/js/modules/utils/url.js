@@ -8,7 +8,7 @@ class UrlUtilsController {
 	constructor() {}
 
 	/**
-	 * Extracts the hostname from a full URL or raw domain string.
+	 * Extracts the hostname from a full URL or raw domain string, stripping the 'www.' prefix automatically.
 	 * @param {string} urlString The raw string to parse.
 	 * @returns {string|null} The parsed hostname, or null if invalid.
 	 */
@@ -17,15 +17,23 @@ class UrlUtilsController {
 			return null;
 		}
 
+		let hostname = null;
+
 		try {
-			return new URL(urlString).hostname;
+			hostname = new URL(urlString).hostname;
 		} catch (e) {
 			try {
-				return new URL(`https://${urlString}`).hostname;
+				hostname = new URL(`https://${urlString}`).hostname;
 			} catch (e2) {
 				return null;
 			}
 		}
+
+		if (hostname) {
+			return hostname.replace(/^www\./, '');
+		}
+
+		return null;
 	}
 }
 

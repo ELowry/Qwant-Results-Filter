@@ -182,7 +182,7 @@ export const RECOMMENDED_LISTS = {
 		},
 		{
 			name: 'bcaso: 电脑技术类型的白名单 whitelist',
-			url: 'https://raw.githubusercontent.com/bcaso/Computer-Science-Whitelist/main/whitelists/whitelist.txt',
+			url: 'https://raw.githubusercontent.com/bcaso/Computer-Science-Whitelist/refs/heads/main/whitelists/whitelists_combined.txt',
 			homepage: 'https://github.com/bcaso/Computer-Science-Whitelist',
 			description: '白名单比更名单更高效，但是黑名单不能与白名单同时使用。',
 		},

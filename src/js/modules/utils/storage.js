@@ -1,3 +1,5 @@
+import { Logger } from './logger.js';
+
 /**
  * Utility controller for managing chunked browser storage to bypass sync limits.
  */
@@ -22,6 +24,7 @@ class StorageUtilsController {
 	 * @returns {Promise<void>} Resolves when saved.
 	 */
 	async saveList(key, dataArray) {
+		Logger.debug(`Saving list ${key} with ${dataArray.length} items.`);
 		await browser.storage.local.set({ [key]: dataArray });
 
 		const chunks = [];
@@ -38,10 +41,9 @@ class StorageUtilsController {
 
 		try {
 			await browser.storage.sync.set(syncObject);
+			Logger.debug(`List ${key} successfully synced across ${chunks.length} chunks.`);
 		} catch (error) {
-			console.warn(
-				`[Qwant Filter] Sync quota exceeded for ${key}. Falling back to local only.`
-			);
+			Logger.warn(`Sync quota exceeded for ${key}. Falling back to local only.`);
 		}
 	}
 
@@ -66,14 +68,14 @@ class StorageUtilsController {
 	 * @returns {Promise<Array<string>>} The reconstructed array.
 	 */
 	async pullFromSync(key) {
+		Logger.debug(`Pulling ${key} from sync storage...`);
 		const meta = await browser.storage.sync.get(`${key}_chunks`);
 		const totalChunks = meta[`${key}_chunks`] || 0;
 
 		if (totalChunks === 0) {
-			const legacy = await browser.storage.sync.get(key);
-			const data = legacy[key] || [];
-			await browser.storage.local.set({ [key]: data });
-			return data;
+			Logger.debug(`No chunks found for ${key}, initializing empty array.`);
+			await browser.storage.local.set({ [key]: [] });
+			return [];
 		}
 
 		const chunkKeys = Array.from({ length: totalChunks }, (_, i) => `${key}_${i}`);
@@ -87,6 +89,7 @@ class StorageUtilsController {
 		}
 
 		await browser.storage.local.set({ [key]: combined });
+		Logger.debug(`Pulled ${combined.length} items for ${key} from sync.`);
 
 		return combined;
 	}
