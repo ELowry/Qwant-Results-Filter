@@ -41,6 +41,8 @@ _Coming Soon_
 
 This extension respects your privacy implicitly. It operates entirely locally within your browser and does not collect, store, or transmit any personal data or search queries.
 
+For full details on how data and network requests are handled, please read the [Privacy Policy](PRIVACY.md).
+
 ## Building from Source
 
 For developers who wish to build the extension from source, please refer to the dedicated [AMO README](AMO-README.md) file.
