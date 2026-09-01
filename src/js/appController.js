@@ -83,21 +83,7 @@ class AppController {
 		this.#processDOM(false).catch((err) => Logger.error(err));
 
 		window.addEventListener('popstate', async () => {
-			await InjectedUI.init({
-				onConfirm: (action, domain) => {
-					this.#handleConfirmAction(action, domain);
-				},
-				onRevealToggle: (isRevealMode) => {
-					this.#handleRevealToggle(isRevealMode, true);
-				},
-				onOpenOptions: () => {
-					browser.runtime
-						.sendMessage({ action: 'openOptionsPage' })
-						.catch((err) => Logger.error(err));
-				},
-			});
-
-			document.body.classList.toggle('qf-reveal-mode', this.#isRevealMode);
+			await this.#reinitializeUI();
 
 			setTimeout(() => {
 				this.#setupTargetedObserver();
@@ -107,21 +93,7 @@ class AppController {
 
 		window.addEventListener('pageshow', async (event) => {
 			if (event.persisted) {
-				await InjectedUI.init({
-					onConfirm: (action, domain) => {
-						this.#handleConfirmAction(action, domain);
-					},
-					onRevealToggle: (isRevealMode) => {
-						this.#handleRevealToggle(isRevealMode, true);
-					},
-					onOpenOptions: () => {
-						browser.runtime
-							.sendMessage({ action: 'openOptionsPage' })
-							.catch((err) => Logger.error(err));
-					},
-				});
-
-				document.body.classList.toggle('qf-reveal-mode', this.#isRevealMode);
+				await this.#reinitializeUI();
 				this.#setupTargetedObserver();
 				this.#processDOM(true).catch((err) => Logger.error(err));
 			}
@@ -277,6 +249,29 @@ class AppController {
 		}
 
 		this.#applyUpdates(parsedData.validElements);
+	}
+
+	/**
+	 * Reinitializes the UI and applies current visual state during page navigation.
+	 * @private
+	 * @returns {Promise<void>} Resolves when the UI is re-bound.
+	 */
+	async #reinitializeUI() {
+		await InjectedUI.init({
+			onConfirm: (action, domain) => {
+				this.#handleConfirmAction(action, domain);
+			},
+			onRevealToggle: (isRevealMode) => {
+				this.#handleRevealToggle(isRevealMode, true);
+			},
+			onOpenOptions: () => {
+				browser.runtime
+					.sendMessage({ action: 'openOptionsPage' })
+					.catch((err) => Logger.error(err));
+			},
+		});
+
+		document.body.classList.toggle('qf-reveal-mode', this.#isRevealMode);
 	}
 
 	/**
