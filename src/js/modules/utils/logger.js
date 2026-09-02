@@ -12,6 +12,10 @@ class LoggerController {
 	 * @returns {boolean} True if the extension is running in development mode.
 	 */
 	static get IS_DEV() {
+		if (typeof browser === 'undefined' || !browser.runtime) {
+			return false;
+		}
+
 		const manifest = browser.runtime.getManifest();
 		return !('update_url' in manifest);
 	}
