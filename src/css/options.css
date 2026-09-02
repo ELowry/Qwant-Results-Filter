@@ -11,6 +11,11 @@
 	--color-border: oklch(from var(--hex-border) l c h);
 	--color-alert-caution: oklch(from var(--hex-alert-caution) l c h);
 
+	--scrollbar-thumb: oklch(from var(--color-accent) calc(l - 0.1) calc(c - 0.02) h);
+	--scrollbar-thumb-hover: oklch(from var(--scrollbar-thumb) calc(l + 0.05) calc(c - 0.02) h);
+	--scrollbar-track: oklch(from var(--color-background) calc(l - 0.04) c h);
+	--scrollbar-colors: var(--scrollbar-thumb) var(--scrollbar-track);
+
 	--color-background-hover: color-mix(
 		in oklch,
 		var(--color-background) 90%,
@@ -26,6 +31,21 @@
 	@media print, (prefers-color-scheme: light) {
 		--color-alert-caution: oklch(from var(--hex-alert-caution) calc(l - 0.12) calc(c - 0.02) h);
 	}
+
+	scrollbar-color: var(--scrollbar-colors);
+	::-webkit-scrollbar-thumb {
+		background: var(--scrollbar-color-thumb);
+	}
+	::-webkit-scrollbar-track {
+		background: var(--scrollbar-color-track);
+	}
+	::-webkit-scrollbar {
+		max-width: var(--scrollbar-width-legacy);
+		max-height: var(--scrollbar-width-legacy);
+	}
+	:hover::-webkit-scrollbar-thumb {
+		background: var(--scrollbar-color-hover);
+	}
 }
 
 @media (prefers-color-scheme: light) {
@@ -34,7 +54,21 @@
 		--hex-text: #221a1f;
 		--hex-accent: #6d0a1f;
 		--hex-border: #b19f9e;
+
+		--scrollbar-thumb: oklch(from var(--color-accent) calc(l + 0.1) calc(c - 0.02) h);
+		--scrollbar-thumb-hover: oklch(from var(--scrollbar-thumb) calc(l + 0.04) c h);
+		--scrollbar-track: oklch(from var(--color-background) calc(l + 0.02) c h);
+		--scrollbar-colors: var(--scrollbar-thumb) var(--scrollbar-track);
+
+		--scrollbar-colors: var(--color-border-active)
+			oklch(from var(--color-background) calc(l + 0.04) c h);
 	}
+}
+
+*:focus-visible {
+	position: relative;
+	outline: dashed 1px var(--color-accent);
+	outline-offset: var(--border-width);
 }
 
 body {
