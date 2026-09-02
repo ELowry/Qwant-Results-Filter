@@ -1,35 +1,35 @@
 {
-	"name": "qwant-results-filter",
-	"version": "0.4.1",
-	"type": "module",
-	"main": "AppController.js",
-	"scripts": {
-		"generate": "node scripts/fetch-presets.mjs && prettier --write src/js/modules/presets.js",
-		"lint": "eslint . && prettier --check . && npm run lint:ext",
-		"lint:fix": "eslint . --fix && prettier --write .",
-		"lint:ext": "web-ext lint --source-dir src",
-		"format": "prettier --write \"src/**/*.{js,css,html,md}\"",
-		"dev": "web-ext run --source-dir src",
-		"version": "node -e \"const fs=require('fs'); const p=require('./package.json'); const m=require('./src/manifest.json'); m.version=p.version; fs.writeFileSync('./src/manifest.json', JSON.stringify(m, null, '\\t') + '\\n');\" && prettier --write src/manifest.json && npm run i",
-		"prebuild": "node scripts/check-version.mjs",
-		"build": "npm run generate && npm run lint && web-ext build --source-dir src --artifacts-dir dist --overwrite-dest",
-		"build:source": "npm run prebuild && npm run lint && node scripts/build-source.mjs",
-		"update": "npm update && npm ci && npm i",
-		"upgrade": "npx npm-check-updates -u"
-	},
-	"allowScripts": {
-		"web-ext": true
-	},
-	"devDependencies": {
-		"@eslint/js": "^10.0.1",
-		"@trivago/prettier-plugin-sort-imports": "^6.0.2",
-		"eslint": "^10.9.1",
-		"eslint-config-prettier": "^10.1.8",
-		"eslint-plugin-jsdoc": "^64.3.3",
-		"globals": "^17.11.0",
-		"js-yaml": "^5.4.1",
-		"prettier": "^3.9.6",
-		"prettier-plugin-css-order": "^2.2.0",
-		"web-ext": "^10.6.0"
-	}
+  "name": "qwant-results-filter",
+  "version": "0.4.2",
+  "type": "module",
+  "main": "AppController.js",
+  "scripts": {
+    "generate": "node scripts/fetch-presets.mjs && prettier --write src/js/modules/presets.js",
+    "lint": "eslint . && prettier --check . && npm run lint:ext",
+    "lint:fix": "eslint . --fix && prettier --write .",
+    "lint:ext": "web-ext lint --source-dir src",
+    "format": "prettier --write .",
+    "dev": "web-ext run --source-dir src",
+    "version": "node -e \"const fs=require('fs'); const p=require('./package.json'); const m=require('./src/manifest.json'); m.version=p.version; fs.writeFileSync('./src/manifest.json', JSON.stringify(m, null, '\\t') + '\\n');\" && prettier --write src/manifest.json && npm i",
+    "prebuild": "node scripts/check-version.mjs",
+    "build": "npm run generate && npm run lint && web-ext build --source-dir src --artifacts-dir dist --overwrite-dest",
+    "build:source": "npm run prebuild && npm run lint && node scripts/build-source.mjs",
+    "update": "npm update && npm ci && npm i",
+    "upgrade": "npx npm-check-updates -u"
+  },
+  "allowScripts": {
+    "web-ext": true
+  },
+  "devDependencies": {
+    "@eslint/js": "^10.0.1",
+    "@trivago/prettier-plugin-sort-imports": "^6.0.2",
+    "eslint": "^10.9.1",
+    "eslint-config-prettier": "^10.1.8",
+    "eslint-plugin-jsdoc": "^64.3.4",
+    "globals": "^17.12.0",
+    "js-yaml": "^5.4.1",
+    "prettier": "^3.9.6",
+    "prettier-plugin-css-order": "^2.2.0",
+    "web-ext": "^10.6.0"
+  }
 }
