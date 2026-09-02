@@ -1,4 +1,4 @@
-[![License: MIT](https://img.shields.io/badge/License-MIT-3d383b.svg)](LICENSE) [![Latest GitHub release](https://img.shields.io/github/v/release/ELowry/Qwant-Results-Filter?logo=GitHub&color=a4785e)](https://github.com/ELowry/Qwant-Results-Filter/releases/latest)
+[![License: MIT](https://img.shields.io/badge/License-MIT-3d383b.svg)](LICENSE) [![Latest GitHub release](https://img.shields.io/github/v/release/ELowry/Qwant-Results-Filter?logo=GitHub&color=a4785e)](https://github.com/ELowry/Qwant-Results-Filter/releases/latest) [![Mozilla Add-on Users](https://img.shields.io/amo/users/qwant-results-filter?logo=firefox&color=e19085)](https://addons.mozilla.org/en-US/firefox/addon/qwant-results-filter/)
 
 # [![Qwant Results Filter](logo.png)](#)
 
