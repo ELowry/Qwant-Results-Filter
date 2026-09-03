@@ -59,9 +59,6 @@
 		--scrollbar-thumb-hover: oklch(from var(--scrollbar-thumb) calc(l + 0.04) c h);
 		--scrollbar-track: oklch(from var(--color-background) calc(l + 0.02) c h);
 		--scrollbar-colors: var(--scrollbar-thumb) var(--scrollbar-track);
-
-		--scrollbar-colors: var(--color-border-active)
-			oklch(from var(--color-background) calc(l + 0.04) c h);
 	}
 }
 

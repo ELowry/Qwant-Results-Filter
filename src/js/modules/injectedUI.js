@@ -68,6 +68,107 @@ class InjectedUIController {
 	}
 
 	/**
+	 * Fetches, translates, and injects the necessary dialog templates into the document body.
+	 * @private
+	 * @returns {Promise<void>} Resolves when templates have been successfully appended.
+	 */
+	async #injectTemplates() {
+		if (document.getElementById('qf-confirm-modal')) {
+			return;
+		}
+
+		const templateUrl = browser.runtime.getURL('templates/injectedUi.html');
+		const response = await fetch(templateUrl);
+		const htmlText = await response.text();
+
+		const parser = new DOMParser();
+		const parsedDoc = parser.parseFromString(htmlText, 'text/html');
+
+		I18n.translateDom(parsedDoc.body);
+
+		document.body.append(...parsedDoc.body.children);
+	}
+
+	/**
+	 * Binds event listeners to the injected modals.
+	 * @private
+	 * @returns {void} Returns nothing.
+	 */
+	#setupEventListeners() {
+		const confirmModal = document.getElementById('qf-confirm-modal');
+		const qsModal = document.getElementById('qf-quick-settings-modal');
+
+		document.getElementById('qf-confirm-cancel').addEventListener('click', () => {
+			this.#closeModalAnimated(confirmModal);
+		});
+
+		document.getElementById('qf-confirm-submit').addEventListener('click', () => {
+			if (this.#onConfirmCallback && this.#pendingDomain) {
+				this.#onConfirmCallback(this.#pendingDomain.action, this.#pendingDomain.domain);
+			}
+			this.#closeModalAnimated(confirmModal);
+			this.#pendingDomain = null;
+		});
+
+		document.getElementById('qf-qs-close').addEventListener('click', () => {
+			this.#closeModalAnimated(qsModal);
+		});
+
+		const handleBackdropClick = (modal) => (event) => {
+			if (event.target === modal) {
+				this.#closeModalAnimated(modal);
+			}
+		};
+
+		confirmModal.addEventListener('click', handleBackdropClick(confirmModal));
+		qsModal.addEventListener('click', handleBackdropClick(qsModal));
+
+		document.getElementById('qf-toggle-reveal-switch').addEventListener('change', (event) => {
+			if (this.#onRevealToggleCallback) {
+				this.#onRevealToggleCallback(event.target.checked);
+			}
+		});
+
+		document.getElementById('qf-open-options').addEventListener('click', () => {
+			if (this.#onOpenOptionsCallback) {
+				this.#onOpenOptionsCallback();
+			}
+		});
+	}
+
+	/**
+	 * Closes a dialog element natively after a brief CSS animation completes.
+	 * @param {HTMLDialogElement} modal The dialog element to close.
+	 * @private
+	 * @returns {void} Returns nothing.
+	 */
+	#closeModalAnimated(modal) {
+		modal.classList.add('is-closing');
+		setTimeout(() => {
+			modal.close();
+			modal.classList.remove('is-closing');
+		}, InjectedUIController.ANIMATION_MS);
+	}
+
+	/**
+	 * Creates an unblock button element from the template and binds its click listener.
+	 * @param {string} domain The domain to unblock.
+	 * @private
+	 * @returns {HTMLButtonElement} The constructed button element.
+	 */
+	#createUnblockButton(domain) {
+		const template = document.getElementById('template-unblock-button');
+		const clone = template.content.cloneNode(true);
+		const button = clone.querySelector('button');
+
+		button.addEventListener('click', () => {
+			this.openConfirmModal('unblock', domain);
+		});
+
+		return button;
+	}
+
+	/**
 	 * Opens the confirmation dialog for blocking or unblocking a domain.
 	 * @param {string} action The action to perform ('block' or 'unblock').
 	 * @param {string} domain The target hostname.
@@ -279,107 +380,6 @@ class InjectedUIController {
 			button.setAttribute('aria-label', I18n.getMessage('actionBlockAria', hostname));
 			button.dataset.qfAction = 'block';
 		}
-	}
-
-	/**
-	 * Fetches, translates, and injects the necessary dialog templates into the document body.
-	 * @private
-	 * @returns {Promise<void>} Resolves when templates have been successfully appended.
-	 */
-	async #injectTemplates() {
-		if (document.getElementById('qf-confirm-modal')) {
-			return;
-		}
-
-		const templateUrl = browser.runtime.getURL('templates/injectedUi.html');
-		const response = await fetch(templateUrl);
-		const htmlText = await response.text();
-
-		const parser = new DOMParser();
-		const parsedDoc = parser.parseFromString(htmlText, 'text/html');
-
-		I18n.translateDom(parsedDoc.body);
-
-		document.body.append(...parsedDoc.body.children);
-	}
-
-	/**
-	 * Binds event listeners to the injected modals.
-	 * @private
-	 * @returns {void} Returns nothing.
-	 */
-	#setupEventListeners() {
-		const confirmModal = document.getElementById('qf-confirm-modal');
-		const qsModal = document.getElementById('qf-quick-settings-modal');
-
-		document.getElementById('qf-confirm-cancel').addEventListener('click', () => {
-			this.#closeModalAnimated(confirmModal);
-		});
-
-		document.getElementById('qf-confirm-submit').addEventListener('click', () => {
-			if (this.#onConfirmCallback && this.#pendingDomain) {
-				this.#onConfirmCallback(this.#pendingDomain.action, this.#pendingDomain.domain);
-			}
-			this.#closeModalAnimated(confirmModal);
-			this.#pendingDomain = null;
-		});
-
-		document.getElementById('qf-qs-close').addEventListener('click', () => {
-			this.#closeModalAnimated(qsModal);
-		});
-
-		const handleBackdropClick = (modal) => (event) => {
-			if (event.target === modal) {
-				this.#closeModalAnimated(modal);
-			}
-		};
-
-		confirmModal.addEventListener('click', handleBackdropClick(confirmModal));
-		qsModal.addEventListener('click', handleBackdropClick(qsModal));
-
-		document.getElementById('qf-toggle-reveal-switch').addEventListener('change', (event) => {
-			if (this.#onRevealToggleCallback) {
-				this.#onRevealToggleCallback(event.target.checked);
-			}
-		});
-
-		document.getElementById('qf-open-options').addEventListener('click', () => {
-			if (this.#onOpenOptionsCallback) {
-				this.#onOpenOptionsCallback();
-			}
-		});
-	}
-
-	/**
-	 * Closes a dialog element natively after a brief CSS animation completes.
-	 * @param {HTMLDialogElement} modal The dialog element to close.
-	 * @private
-	 * @returns {void} Returns nothing.
-	 */
-	#closeModalAnimated(modal) {
-		modal.classList.add('is-closing');
-		setTimeout(() => {
-			modal.close();
-			modal.classList.remove('is-closing');
-		}, InjectedUIController.ANIMATION_MS);
-	}
-
-	/**
-	 * Creates an unblock button element from the template and binds its click listener.
-	 * @param {string} domain The domain to unblock.
-	 * @private
-	 * @returns {HTMLButtonElement} The constructed button element.
-	 */
-	#createUnblockButton(domain) {
-		const template = document.getElementById('template-unblock-button');
-		const clone = template.content.cloneNode(true);
-		const button = clone.querySelector('button');
-
-		button.addEventListener('click', () => {
-			this.openConfirmModal('unblock', domain);
-		});
-
-		return button;
 	}
 }
 

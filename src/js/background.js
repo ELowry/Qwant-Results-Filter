@@ -86,8 +86,8 @@ class BackgroundController {
 
 		if (needsRefresh) {
 			Logger.info('Triggering list refresh due to invalid caches...');
-			this.#refreshFilterLists().catch((err) =>
-				Logger.error('List auto-refresh failed:', err)
+			this.#refreshFilterLists().catch((error) =>
+				Logger.error('List auto-refresh failed:', error)
 			);
 		}
 
@@ -107,12 +107,12 @@ class BackgroundController {
 			}
 
 			if (message.action === 'openOptionsPage') {
-				browser.runtime.openOptionsPage().catch((err) => Logger.error(err));
+				browser.runtime.openOptionsPage().catch((error) => Logger.error(error));
 			}
 
 			if (message.action === 'forceListRefresh') {
 				Logger.info('Manual list refresh triggered via message.');
-				this.#refreshFilterLists().catch((err) => Logger.error(err));
+				this.#refreshFilterLists().catch((error) => Logger.error(error));
 			}
 		});
 	}
@@ -165,7 +165,7 @@ class BackgroundController {
 	 */
 	#setupActionListener() {
 		browser.action.onClicked.addListener(() => {
-			browser.runtime.openOptionsPage().catch((err) => Logger.error(err));
+			browser.runtime.openOptionsPage().catch((error) => Logger.error(error));
 		});
 	}
 

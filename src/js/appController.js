@@ -61,7 +61,7 @@ class AppController {
 			onOpenOptions: () => {
 				browser.runtime
 					.sendMessage({ action: 'openOptionsPage' })
-					.catch((err) => Logger.error(err));
+					.catch((error) => Logger.error(error));
 			},
 		});
 
@@ -75,19 +75,19 @@ class AppController {
 				|| (areaName === 'local' && changes.filterListCache)
 			) {
 				this.#domainStatusCache.clear();
-				this.#processDOM(true).catch((err) => Logger.error(err));
+				this.#processDOM(true).catch((error) => Logger.error(error));
 			}
 		});
 
 		this.#setupTargetedObserver();
-		this.#processDOM(false).catch((err) => Logger.error(err));
+		this.#processDOM(false).catch((error) => Logger.error(error));
 
 		window.addEventListener('popstate', async () => {
 			await this.#reinitializeUI();
 
 			setTimeout(() => {
 				this.#setupTargetedObserver();
-				this.#processDOM(true).catch((err) => Logger.error(err));
+				this.#processDOM(true).catch((error) => Logger.error(error));
 			}, AppController.DEBOUNCE_MS);
 		});
 
@@ -95,7 +95,7 @@ class AppController {
 			if (event.persisted) {
 				await this.#reinitializeUI();
 				this.#setupTargetedObserver();
-				this.#processDOM(true).catch((err) => Logger.error(err));
+				this.#processDOM(true).catch((error) => Logger.error(error));
 			}
 		});
 	}
@@ -161,7 +161,7 @@ class AppController {
 				}
 
 				this.#debounceTimer = setTimeout(() => {
-					this.#processDOM(false);
+					this.#processDOM(false).catch((error) => Logger.error(error));
 				}, AppController.DEBOUNCE_MS);
 			});
 
@@ -175,7 +175,7 @@ class AppController {
 				if (currentMain !== targetElement) {
 					this.#setupTargetedObserver();
 					if (currentMain) {
-						this.#processDOM(true);
+						this.#processDOM(true).catch((error) => Logger.error(error));
 					}
 				}
 			}, 500);
@@ -194,7 +194,7 @@ class AppController {
 			if (delayedMainContent) {
 				obs.disconnect();
 				applyObserver(delayedMainContent);
-				this.#processDOM(true).catch((err) => Logger.error(err));
+				this.#processDOM(true).catch((error) => Logger.error(error));
 			}
 		});
 
@@ -267,7 +267,7 @@ class AppController {
 			onOpenOptions: () => {
 				browser.runtime
 					.sendMessage({ action: 'openOptionsPage' })
-					.catch((err) => Logger.error(err));
+					.catch((error) => Logger.error(error));
 			},
 		});
 
