@@ -200,47 +200,81 @@ class OptionsController {
 	/**
 	 * Handles the submission and validation of custom or preset filter lists.
 	 * @private
-	 * @returns {Promise<void>} Resolves when the list is processed.
+	 * @returns {Promise<void>} Resolves when the lists are processed.
 	 */
 	async #handleAddListSubmit() {
-		let url = this.#urlInput.value.trim();
+		const rawInput = this.#urlInput.value.trim();
 
-		if (!url) {
+		if (!rawInput) {
 			return;
 		}
 
-		const normalizedInputUrl = this.#normalizeUrl(url);
-		let matchedPresetUrl = null;
+		const urls = rawInput.split(/[,\s]+/).filter(Boolean);
+		this.#urlInput.value = '';
+		this.#addListButton.disabled = true;
 
-		if (RECOMMENDED_LISTS && typeof RECOMMENDED_LISTS === 'object') {
-			for (const items of Object.values(RECOMMENDED_LISTS)) {
-				for (const item of items) {
-					if (this.#normalizeUrl(item.url) === normalizedInputUrl) {
-						matchedPresetUrl = item.url;
+		let addedCount = 0;
+		let wasPreset = false;
+		let lastMatchedPresetUrl = null;
+
+		for (const url of urls) {
+			const normalizedInputUrl = this.#normalizeUrl(url);
+			let matchedPresetUrl = null;
+
+			if (RECOMMENDED_LISTS && typeof RECOMMENDED_LISTS === 'object') {
+				for (const items of Object.values(RECOMMENDED_LISTS)) {
+					for (const item of items) {
+						if (this.#normalizeUrl(item.url) === normalizedInputUrl) {
+							matchedPresetUrl = item.url;
+							break;
+						}
+					}
+
+					if (matchedPresetUrl) {
 						break;
 					}
 				}
+			}
 
-				if (matchedPresetUrl) {
-					break;
+			if (matchedPresetUrl) {
+				wasPreset = true;
+				lastMatchedPresetUrl = matchedPresetUrl;
+
+				const syncData = await browser.storage.sync.get({ filterLists: [] });
+				const isAlreadyActive = syncData.filterLists.find(
+					(l) => l.url === matchedPresetUrl
+				);
+
+				if (!isAlreadyActive) {
+					this.#addListButton.textContent = I18n.getMessage('buttonAdding');
+					const success = await this.#addFilterList(matchedPresetUrl);
+
+					if (success) {
+						addedCount++;
+					}
 				}
+
+				continue;
+			}
+
+			this.#addListButton.textContent = I18n.getMessage('buttonFetching');
+			const success = await this.#addFilterList(normalizedInputUrl);
+
+			if (success) {
+				addedCount++;
 			}
 		}
 
-		if (matchedPresetUrl) {
-			this.#urlInput.value = '';
+		this.#addListButton.textContent = I18n.getMessage('optionsAddListButton');
+		this.#addListButton.disabled = false;
 
+		if (urls.length === 1 && wasPreset) {
 			const syncData = await browser.storage.sync.get({ filterLists: [] });
-			const isAlreadyActive = syncData.filterLists.find((l) => l.url === matchedPresetUrl);
+			const isActive = syncData.filterLists.find((l) => l.url === lastMatchedPresetUrl);
 
-			if (!isAlreadyActive) {
-				this.#addListButton.textContent = I18n.getMessage('buttonAdding');
-				this.#addListButton.disabled = true;
-				await this.#addFilterList(matchedPresetUrl);
-				this.#addListButton.textContent = I18n.getMessage('optionsAddListButton');
-				this.#addListButton.disabled = false;
+			if (addedCount > 0) {
 				this.#showToast(I18n.getMessage('toastListAddedFromPresets'));
-			} else {
+			} else if (isActive) {
 				this.#showToast(I18n.getMessage('toastListAlreadyActive'));
 			}
 
@@ -256,7 +290,7 @@ class OptionsController {
 				this.#togglePresetsButton.classList.add('qf-pulsate');
 			} else {
 				const toggleInput = this.#presetsContainer.querySelector(
-					`input[data-url="${matchedPresetUrl}"]`
+					`input[data-url="${lastMatchedPresetUrl}"]`
 				);
 
 				if (toggleInput) {
@@ -270,20 +304,7 @@ class OptionsController {
 					}
 				}
 			}
-
-			return;
-		}
-
-		this.#addListButton.textContent = I18n.getMessage('buttonFetching');
-		this.#addListButton.disabled = true;
-
-		const success = await this.#addFilterList(normalizedInputUrl);
-
-		this.#addListButton.textContent = I18n.getMessage('optionsAddListButton');
-		this.#addListButton.disabled = false;
-
-		if (success) {
-			this.#urlInput.value = '';
+		} else if (addedCount > 0) {
 			this.#showToast(I18n.getMessage('toastCustomListAdded'));
 		}
 	}

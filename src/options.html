@@ -90,10 +90,14 @@
 
 		<form id="qf-add-list-form" class="qf-form-group">
 			<input
-				type="url"
+				type="text"
 				id="qf-list-input"
 				placeholder="https://raw.githubusercontent.com/.../list.txt"
 				data-i18n-placeholder="optionsListUrlPlaceholder"
+				pattern="\s*(https?:\/\/[^\s,]+)(?:[,\s]+https?:\/\/[^\s,]+)*\s*"
+				title="Please enter one or more valid URLs (e.g., https://...)"
+				data-i18n-title="optionsListUrlPatternTitle"
+				required
 			/>
 			<button id="qf-add-list-button" type="submit" data-i18n="optionsAddListButton"
 				>Add List</button
@@ -111,8 +115,8 @@
 				id="qf-block-input"
 				placeholder="example.com"
 				data-i18n-placeholder="optionsDomainInputPlaceholder"
-				pattern="^([^\s]+\.[^\s]+)(?:[,\s]+[^\s]+\.[^\s]+)*$"
-				title="Please enter a valid domain (e.g., example.com)"
+				pattern="\s*([^\s,]+\.[^\s,]+)(?:[,\s]+[^\s,]+\.[^\s,]+)*\s*"
+				title="Please enter one or more valid domains (e.g., example.com)"
 				data-i18n-title="optionsDomainPatternTitle"
 				required
 			/>
@@ -129,8 +133,8 @@
 					id="qf-whitelist-input"
 					placeholder="example.com"
 					data-i18n-placeholder="optionsDomainInputPlaceholder"
-					pattern="^([^\s]+\.[^\s]+)(?:[,\s]+[^\s]+\.[^\s]+)*$"
-					title="Please enter a valid domain (e.g., example.com)"
+					pattern="\s*([^\s,]+\.[^\s,]+)(?:[,\s]+[^\s,]+\.[^\s,]+)*\s*"
+					title="Please enter one or more valid domains (e.g., example.com)"
 					data-i18n-title="optionsDomainPatternTitle"
 					required
 				/>

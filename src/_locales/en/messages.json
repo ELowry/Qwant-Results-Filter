@@ -77,6 +77,10 @@
 		"message": "https://raw.githubusercontent.com/.../list.txt",
 		"description": "Placeholder for the custom filter list input field."
 	},
+	"optionsListUrlPatternTitle": {
+		"message": "Please enter one or more valid URLs (e.g., https://...)",
+		"description": "Validation tooltip for the custom list URL input field."
+	},
 	"optionsAddListButton": {
 		"message": "Add List",
 		"description": "Button text to submit and add a filter list."
@@ -90,7 +94,7 @@
 		"description": "Placeholder for domain input field."
 	},
 	"optionsDomainPatternTitle": {
-		"message": "Please enter a valid domain (e.g., example.com)",
+		"message": "Please enter one or more valid domains (e.g., example.com)",
 		"description": "Validation tooltip for domain input fields."
 	},
 	"optionsBlockDomainButton": {
