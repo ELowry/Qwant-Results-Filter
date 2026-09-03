@@ -105,7 +105,11 @@ class InjectedUIController {
 	 */
 	updateCounterButton(count, totalResults, onClick) {
 		let counterButton = document.getElementById('qf-counter-button');
-		const settingsButton = document.querySelector('a[href*="drawer=settings"]');
+		let settingsButton = document.querySelector('a[href*="bottomMenu=1"]');
+
+		if (!settingsButton) {
+			settingsButton = document.querySelector('a[href*="drawer=settings"]');
+		}
 
 		if (settingsButton && !counterButton) {
 			counterButton = document.createElement('button');
