@@ -230,7 +230,9 @@ class BackgroundController {
 
 		browser.alarms.onAlarm.addListener((alarm) => {
 			if (alarm.name === 'update-filter-lists') {
-				this.#refreshFilterLists();
+				this.#refreshFilterLists().catch((error) =>
+					Logger.error('Background alarm failed:', error)
+				);
 			}
 		});
 	}
