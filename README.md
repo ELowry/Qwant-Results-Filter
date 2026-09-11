@@ -26,7 +26,8 @@ Qwant Results Filter puts you back in control of your search results by removing
 
 ## Installation
 
-_Coming Soon_
+- Desktop: **[Download it from the Firefox Add-ons store](https://addons.mozilla.org/addon/qwant-results-filter/)**.
+- Android: **[Download it from the Firefox Add-ons store](https://addons.mozilla.org/android/addon/qwant-results-filter/)**.
 
 ## Usage
 
