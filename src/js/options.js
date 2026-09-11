@@ -893,5 +893,6 @@ class OptionsController {
 	}
 }
 
-export const Options = new OptionsController();
-Options.init();
+const Options = new OptionsController();
+
+Options.init().catch((error) => Logger.error(error));
