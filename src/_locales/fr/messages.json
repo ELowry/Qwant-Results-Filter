@@ -113,6 +113,9 @@
 	"optionsNoCustomLists": {
 		"message": "Aucune liste personnalisée n'a été ajoutée pour le moment."
 	},
+	"optionsRegexNotice": {
+		"message": "Remarque: cette extension ignore les règles basées sur des expressions régulières (\"regex\") pour une meilleure performance."
+	},
 	"buttonAdding": {
 		"message": "Ajout en cours…"
 	},

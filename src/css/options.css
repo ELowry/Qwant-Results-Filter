@@ -343,3 +343,12 @@ hr {
 	animation: qf-pulse-highlight 1s ease-in-out 2;
 	border-color: var(--color-accent);
 }
+
+.qf-notice {
+	margin: -0.25rem 0 1.25rem;
+	border-left: 2px solid var(--color-border);
+	padding-left: 0.75rem;
+	color: oklch(from var(--color-text) l c h / 0.75);
+	font-size: 0.85rem;
+	line-height: 1.4;
+}

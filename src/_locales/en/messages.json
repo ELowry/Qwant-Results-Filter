@@ -145,6 +145,10 @@
 		"message": "No custom lists added yet.",
 		"description": "Message displayed when no custom filter lists have been added."
 	},
+	"optionsRegexNotice": {
+		"message": "Note: Regular expression (\"regex\") rules are intentionally ignored for performance reasons.",
+		"description": "Notice explaining that regular expression filter rules from uBlacklist lists are not supported."
+	},
 	"buttonAdding": {
 		"message": "Adding...",
 		"description": "Button text when a list is being added."
