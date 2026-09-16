@@ -2,9 +2,6 @@
  * Utility controller for URL parsing and manipulation.
  */
 class UrlUtilsController {
-	/**
-	 * Initializes a new instance of the UrlUtilsController.
-	 */
 	constructor() {}
 
 	/**

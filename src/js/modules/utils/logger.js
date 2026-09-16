@@ -2,9 +2,6 @@
  * Utility controller for standardized logging based on extension environment.
  */
 class LoggerController {
-	/**
-	 * Initializes a new instance of the LoggerController.
-	 */
 	constructor() {}
 
 	/**

@@ -11,9 +11,6 @@ class PresetFetcher {
 	#yamlUrl;
 	#cacheTtl;
 
-	/**
-	 * Initializes a new instance of the PresetFetcher.
-	 */
 	constructor() {
 		this.#outFile = './src/js/modules/presets.js';
 		this.#yamlUrl =

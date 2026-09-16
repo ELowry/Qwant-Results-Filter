@@ -9,31 +9,132 @@ import { UrlUtils } from './modules/utils/url.js';
  * Controller for the options page interface.
  */
 class OptionsController {
+	/**
+	 * @private
+	 * @type {HTMLElement}
+	 */
 	#domainListElement;
-	#filterListElement;
-	#revealSwitch;
-	#urlInput;
-	#addListForm;
-	#addListButton;
-	#presetsContainer;
-	#togglePresetsButton;
-	#togglePresetsLabel;
-	#toastElement;
-	#toastTimer;
-	#whitelistListElement;
-	#whitelistContainerElement;
-	#addBlockForm;
-	#blockInput;
-	#addWhitelistForm;
-	#whitelistInput;
-	#activePresetCount;
-	#exportButton;
-	#importButton;
-	#importFile;
 
 	/**
-	 * Initializes a new instance of the OptionsController.
+	 * @private
+	 * @type {HTMLElement}
 	 */
+	#filterListElement;
+
+	/**
+	 * @private
+	 * @type {HTMLInputElement}
+	 */
+	#revealSwitch;
+
+	/**
+	 * @private
+	 * @type {HTMLInputElement}
+	 */
+	#urlInput;
+
+	/**
+	 * @private
+	 * @type {HTMLFormElement}
+	 */
+	#addListForm;
+
+	/**
+	 * @private
+	 * @type {HTMLButtonElement}
+	 */
+	#addListButton;
+
+	/**
+	 * @private
+	 * @type {HTMLElement}
+	 */
+	#presetsContainer;
+
+	/**
+	 * @private
+	 * @type {HTMLButtonElement}
+	 */
+	#togglePresetsButton;
+
+	/**
+	 * @private
+	 * @type {HTMLElement}
+	 */
+	#togglePresetsLabel;
+
+	/**
+	 * @private
+	 * @type {HTMLElement}
+	 */
+	#toastElement;
+
+	/**
+	 * @private
+	 * @type {number|null}
+	 */
+	#toastTimer;
+
+	/**
+	 * @private
+	 * @type {HTMLElement}
+	 */
+	#whitelistListElement;
+
+	/**
+	 * @private
+	 * @type {HTMLElement}
+	 */
+	#whitelistContainerElement;
+
+	/**
+	 * @private
+	 * @type {HTMLFormElement}
+	 */
+	#addBlockForm;
+
+	/**
+	 * @private
+	 * @type {HTMLInputElement}
+	 */
+	#blockInput;
+
+	/**
+	 * @private
+	 * @type {HTMLFormElement}
+	 */
+	#addWhitelistForm;
+
+	/**
+	 * @private
+	 * @type {HTMLInputElement}
+	 */
+	#whitelistInput;
+
+	/**
+	 * @private
+	 * @type {number}
+	 */
+	#activePresetCount;
+
+	/**
+	 * @private
+	 * @type {HTMLButtonElement}
+	 */
+	#exportButton;
+
+	/**
+	 * @private
+	 * @type {HTMLButtonElement}
+	 */
+	#importButton;
+
+	/**
+	 * @private
+	 * @type {HTMLInputElement}
+	 */
+	#importFile;
+
 	constructor() {
 		this.#domainListElement = document.getElementById('options-domain-list');
 		this.#filterListElement = document.getElementById('options-filter-lists');

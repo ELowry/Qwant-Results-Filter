@@ -2,9 +2,6 @@
  * Controller for managing internationalization and localized DOM injections.
  */
 class I18nController {
-	/**
-	 * Initializes a new instance of the I18nController.
-	 */
 	constructor() {}
 
 	/**

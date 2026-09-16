@@ -7,15 +7,36 @@ import { StorageUtils } from './modules/utils/storage.js';
  * Background controller for managing the unified Filter Trie and responding to tab queries.
  */
 class BackgroundController {
+	/**
+	 * @private
+	 * @type {Array<string>}
+	 */
 	#userBlockedDomains;
-	#userWhitelistedDomains;
-	#cachedListDomains;
-	#cachedListWhitelistedDomains;
-	#initPromise;
 
 	/**
-	 * Initializes a new instance of the BackgroundController.
+	 * @private
+	 * @type {Array<string>}
 	 */
+	#userWhitelistedDomains;
+
+	/**
+	 * @private
+	 * @type {Object<string, {blocked: Array<string>, whitelisted: Array<string>}>}
+	 */
+	#cachedListDomains;
+
+	/**
+	 * @private
+	 * @type {Set<string>}
+	 */
+	#cachedListWhitelistedDomains;
+
+	/**
+	 * @private
+	 * @type {Promise<void>}
+	 */
+	#initPromise;
+
 	constructor() {
 		this.#userBlockedDomains = [];
 		this.#userWhitelistedDomains = [];

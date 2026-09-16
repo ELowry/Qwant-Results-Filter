@@ -4,9 +4,6 @@ import { Logger } from './logger.js';
  * Utility controller for parsing filter lists.
  */
 class ListParserController {
-	/**
-	 * Initializes a new instance of the ListParserController.
-	 */
 	constructor() {}
 
 	/**

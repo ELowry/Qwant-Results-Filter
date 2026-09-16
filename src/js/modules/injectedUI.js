@@ -4,15 +4,36 @@ import { I18n } from './i18n.js';
  * Controller for managing injected UI components, modals, and user interactions.
  */
 class InjectedUIController {
+	/**
+	 * @private
+	 * @type {{action: string, domain: string}|null}
+	 */
 	#pendingDomain;
-	#onConfirmCallback;
-	#onOpenOptionsCallback;
-	#onRevealToggleCallback;
-	#isInitialized;
 
 	/**
-	 * Initializes a new instance of the InjectedUIController.
+	 * @private
+	 * @type {((action: string, domain: string) => void)|null}
 	 */
+	#onConfirmCallback;
+
+	/**
+	 * @private
+	 * @type {(() => void)|null}
+	 */
+	#onOpenOptionsCallback;
+
+	/**
+	 * @private
+	 * @type {((isRevealMode: boolean) => void)|null}
+	 */
+	#onRevealToggleCallback;
+
+	/**
+	 * @private
+	 * @type {boolean}
+	 */
+	#isInitialized;
+
 	constructor() {
 		this.#pendingDomain = null;
 		this.#onConfirmCallback = null;
@@ -49,9 +70,9 @@ class InjectedUIController {
 	/**
 	 * Initializes the injected UI templates and binds base listeners.
 	 * @param {object} options Initialization options.
-	 * @param {Function} options.onConfirm Callback executed when a confirm action is submitted.
-	 * @param {Function} options.onRevealToggle Callback executed when the reveal mode toggle is switched.
-	 * @param {Function} options.onOpenOptions Callback executed when the extension settings button is clicked.
+	 * @param {(action: string, domain: string) => void} options.onConfirm Callback executed when a confirm action is submitted.
+	 * @param {(isRevealMode: boolean) => void} options.onRevealToggle Callback executed when the reveal mode toggle is switched.
+	 * @param {() => void} options.onOpenOptions Callback executed when the extension settings button is clicked.
 	 * @returns {Promise<void>} Resolves when templates are injected and bound.
 	 */
 	async init({ onConfirm, onRevealToggle, onOpenOptions }) {
@@ -201,7 +222,7 @@ class InjectedUIController {
 	 * Updates or creates the counter button next to Qwant's settings.
 	 * @param {number} count The total number of filtered results detected on the current page.
 	 * @param {number} totalResults The total number of results found on the page.
-	 * @param {Function} onClick Click handler for the counter button.
+	 * @param {() => void} onClick Click handler for the counter button.
 	 * @returns {void} Returns nothing.
 	 */
 	updateCounterButton(count, totalResults, onClick) {

@@ -60,6 +60,7 @@ export default [
 						FunctionExpression: false,
 						MethodDefinition: true,
 					},
+					checkConstructors: false,
 					checkGetters: 'no-setter',
 					checkSetters: false,
 				},

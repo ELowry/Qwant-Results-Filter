@@ -4,9 +4,6 @@ import { Logger } from './logger.js';
  * Utility controller for managing chunked browser storage to bypass sync limits.
  */
 class StorageUtilsController {
-	/**
-	 * Initializes a new instance of the StorageUtilsController.
-	 */
 	constructor() {}
 
 	/**

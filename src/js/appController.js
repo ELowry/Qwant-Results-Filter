@@ -8,19 +8,60 @@ import { UrlUtils } from './modules/utils/url.js';
  * Controller for managing Qwant search result filtering and communicating with the background worker.
  */
 class AppController {
+	/**
+	 * @private
+	 * @type {Map<string, string[]>}
+	 */
 	#domainStatusCache;
-	#activeBlockedDetails;
-	#isRevealMode;
-	#observer;
-	#bodyObserver;
-	#debounceTimer;
-	#spaMonitorTimer;
-	#lastHiddenCount;
-	#lastTotalCount;
 
 	/**
-	 * Initializes a new instance of the AppController.
+	 * @private
+	 * @type {Array<{domain: string, isManual: boolean, lists: string[], count: number}>}
 	 */
+	#activeBlockedDetails;
+
+	/**
+	 * @private
+	 * @type {boolean}
+	 */
+	#isRevealMode;
+
+	/**
+	 * @private
+	 * @type {MutationObserver|null}
+	 */
+	#observer;
+
+	/**
+	 * @private
+	 * @type {MutationObserver|null}
+	 */
+	#bodyObserver;
+
+	/**
+	 * @private
+	 * @type {number|null}
+	 */
+	#debounceTimer;
+
+	/**
+	 * @private
+	 * @type {number|null}
+	 */
+	#spaMonitorTimer;
+
+	/**
+	 * @private
+	 * @type {number}
+	 */
+	#lastHiddenCount;
+
+	/**
+	 * @private
+	 * @type {number}
+	 */
+	#lastTotalCount;
+
 	constructor() {
 		this.#domainStatusCache = new Map();
 		this.#activeBlockedDetails = [];

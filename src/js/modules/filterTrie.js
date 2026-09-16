@@ -2,12 +2,18 @@
  * Represents a single node within the Filter Trie.
  */
 class TrieNode {
+	/**
+	 * @private
+	 * @type {Map<string, TrieNode>}
+	 */
 	#children;
-	#sources;
 
 	/**
-	 * Initializes a new instance of the TrieNode.
+	 * @private
+	 * @type {Set<string>}
 	 */
+	#sources;
+
 	constructor() {
 		this.#children = new Map();
 		this.#sources = new Set();
@@ -34,11 +40,12 @@ class TrieNode {
  * Controller for efficiently indexing and matching domains using a reversed suffix trie.
  */
 class FilterTrieController {
+	/**
+	 * @private
+	 * @type {TrieNode}
+	 */
 	#root;
 
-	/**
-	 * Initializes a new instance of the FilterTrieController.
-	 */
 	constructor() {
 		this.#root = new TrieNode();
 	}
