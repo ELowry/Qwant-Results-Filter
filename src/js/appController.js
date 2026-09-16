@@ -62,6 +62,12 @@ class AppController {
 	 */
 	#lastTotalCount;
 
+	/**
+	 * @private
+	 * @type {number}
+	 */
+	#currentDebounceMs;
+
 	constructor() {
 		this.#domainStatusCache = new Map();
 		this.#activeBlockedDetails = [];
@@ -72,16 +78,25 @@ class AppController {
 		this.#spaMonitorTimer = null;
 		this.#lastHiddenCount = 0;
 		this.#lastTotalCount = 0;
+		this.#currentDebounceMs = AppController.DEBOUNCE_FAST_MS;
 
 		this.#loadSessionCache();
 	}
 
 	/**
 	 * @constant
-	 * @returns {number} The delay in milliseconds to debounce DOM mutation processing.
+	 * @returns {number} The fast delay in milliseconds for idle DOM processing.
 	 */
-	static get DEBOUNCE_MS() {
+	static get DEBOUNCE_FAST_MS() {
 		return 50;
+	}
+
+	/**
+	 * @constant
+	 * @returns {number} The slow delay in milliseconds to keep processing down when the page is active.
+	 */
+	static get DEBOUNCE_SLOW_MS() {
+		return 250;
 	}
 
 	/**
@@ -129,7 +144,7 @@ class AppController {
 			setTimeout(() => {
 				this.#setupTargetedObserver();
 				this.#processDOM(true).catch((error) => Logger.error(error));
-			}, AppController.DEBOUNCE_MS);
+			}, AppController.DEBOUNCE_FAST_MS);
 		});
 
 		window.addEventListener('pageshow', async (event) => {
@@ -203,7 +218,7 @@ class AppController {
 
 				this.#debounceTimer = setTimeout(() => {
 					this.#processDOM(false).catch((error) => Logger.error(error));
-				}, AppController.DEBOUNCE_MS);
+				}, this.#currentDebounceMs);
 			});
 
 			this.#observer.observe(targetElement, {
@@ -280,8 +295,11 @@ class AppController {
 		const parsedData = this.#queryAndParseElements(forceRecheck);
 
 		if (parsedData.isEmpty) {
+			this.#currentDebounceMs = AppController.DEBOUNCE_FAST_MS;
 			return;
 		}
+
+		this.#currentDebounceMs = AppController.DEBOUNCE_SLOW_MS;
 
 		const resolveSuccess = await this.#resolveHostnames(parsedData.hostnamesToCheck);
 
