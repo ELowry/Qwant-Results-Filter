@@ -1,6 +1,6 @@
 /**
  * Auto-generated presets list. Do not edit manually.
- * Fetched from: https://raw.githubusercontent.com/ublacklist/ublacklist.github.io/refs/heads/main/community/rulesets.yml
+ * Fetched from: https://raw.githubusercontent.com/ublacklist/ublacklist.github.io/main/data/rulesets.yml
  */
 
 export const RECOMMENDED_LISTS = {
@@ -179,12 +179,6 @@ export const RECOMMENDED_LISTS = {
 				'https://danny0838.github.io/content-farm-terminator/zh/subscriptions-ublacklist',
 			description:
 				'「終結內容農場」瀏覽器套件現在也提供 uBlacklist 格式的黑名單、包括標準內容農場、類內容農場、擴充內容農場、劣質複製農場等。',
-		},
-		{
-			name: 'bcaso: 电脑技术类型的白名单 whitelist',
-			url: 'https://raw.githubusercontent.com/bcaso/Computer-Science-Whitelist/refs/heads/main/whitelists/whitelists_combined.txt',
-			homepage: 'https://github.com/bcaso/Computer-Science-Whitelist',
-			description: '白名单比更名单更高效，但是黑名单不能与白名单同时使用。',
 		},
 	],
 	Italian: [

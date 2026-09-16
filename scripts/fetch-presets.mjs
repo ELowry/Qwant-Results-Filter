@@ -14,7 +14,7 @@ class PresetFetcher {
 	constructor() {
 		this.#outFile = './src/js/modules/presets.js';
 		this.#yamlUrl =
-			'https://raw.githubusercontent.com/ublacklist/ublacklist.github.io/refs/heads/main/community/rulesets.yml';
+			'https://raw.githubusercontent.com/ublacklist/ublacklist.github.io/main/data/rulesets.yml';
 		this.#cacheTtl = 24 * 60 * 60 * 1000;
 	}
 
@@ -75,7 +75,14 @@ class PresetFetcher {
 	 * @returns {boolean} True if the item should be excluded.
 	 */
 	#isExcluded(fullName, subscriptionUrl) {
-		if (fullName === 'RubenKelevra: Leftwing Media blacklist') {
+		if (
+			fullName === 'RubenKelevra: Leftwing Media blacklist'
+			|| fullName.startsWith('bcaso:')
+		) {
+			return true;
+		}
+
+		if (subscriptionUrl.includes('Computer-Science-Whitelist')) {
 			return true;
 		}
 
@@ -125,21 +132,25 @@ class PresetFetcher {
 	}
 
 	/**
-	 * Transforms the parsed YAML object into the grouped structure required by the UI.
+	 * Transforms the parsed YAML array into the grouped structure required by the UI.
 	 * Validates all candidates concurrently using Promise.all.
-	 * @param {object} data The raw parsed YAML data.
+	 * @param {Array<object>} data The raw parsed YAML array.
 	 * @private
 	 * @returns {Promise<object>} The categorized lists.
 	 */
 	async #transformData(data) {
 		const candidates = [];
 
-		for (const [category, items] of Object.entries(data)) {
-			const formattedCategory = category
+		for (const group of data) {
+			if (!group.category || !Array.isArray(group.resources)) {
+				continue;
+			}
+
+			const formattedCategory = group.category
 				.replace(/-/g, ' ')
 				.replace(/\b\w/g, (char) => char.toUpperCase());
 
-			for (const item of items) {
+			for (const item of group.resources) {
 				let authorName = '';
 
 				if (item.author) {
