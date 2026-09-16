@@ -20,7 +20,11 @@ Your settings (manually blocked domains, whitelists, and UI preferences) are:
 If you decide to enable or add any community-curated filter lists, the extension's background worker will update them once every 24 hours.
 
 - It makes standard outbound HTTPS requests to fetch the `.txt` lists you subscribe to (typically hosted on platforms like GitHub or Codeberg).
-- These requests only download the blocklist rules. They **do not** transmit your personal data, browsing history, or search queries to those third-party servers.
+- These requests **do not** transmit your personal data, browsing history, or search queries to those third-party servers.
+
+> [!NOTE]  
+> **The extension requires the `<all_urls>` host permission in order to fetch filter lists from third-party servers.**  
+> This permission is strictly used to download filter lists you provide or enable.
 
 ## Third-Party Filters
 
