@@ -84,6 +84,8 @@ class I18nController {
 				element.setAttribute('aria-label', translatedAria);
 			}
 		}
+
+		document.documentElement.lang = browser.i18n.getUILanguage();
 	}
 }
 
