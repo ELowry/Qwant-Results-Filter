@@ -14,4 +14,4 @@ if (pkg.version !== manifest.version) {
 	process.exit(1);
 }
 
-console.log(`[Qwant Filter] Versions match (${pkg.version}). Proceeding...`);
+console.log(`[Qwant Filter] Versions match (${pkg.version}). Proceeding…`);

@@ -19,7 +19,7 @@ try {
 	const safeName = pkg.name.replace(/-/g, '_');
 	const filename = `${safeName}-${pkg.version}-source.zip`;
 
-	console.log(`[Qwant Filter] Packaging source code into dist/${filename}...`);
+	console.log(`[Qwant Filter] Packaging source code into dist/${filename}…`);
 
 	mkdirSync('dist', { recursive: true });
 

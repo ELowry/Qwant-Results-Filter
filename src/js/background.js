@@ -73,7 +73,7 @@ class BackgroundController {
 	 * @returns {void} Returns nothing.
 	 */
 	#rebuildTrie() {
-		Logger.debug('Rebuilding Filter Trie...');
+		Logger.debug('Rebuilding Filter Trie…');
 		FilterTrie.clear();
 		this.#cachedListWhitelistedDomains.clear();
 
@@ -106,7 +106,7 @@ class BackgroundController {
 		}
 
 		if (needsRefresh) {
-			Logger.info('Triggering list refresh due to invalid caches...');
+			Logger.info('Triggering list refresh due to invalid caches…');
 			this.#refreshFilterLists().catch((error) =>
 				Logger.error('List auto-refresh failed:', error)
 			);
@@ -123,7 +123,7 @@ class BackgroundController {
 	#setupMessageListener() {
 		browser.runtime.onMessage.addListener((message, _sender, _sendResponse) => {
 			if (message.action === 'checkDomains') {
-				Logger.debug(`Handling check for ${message.domains.length} domains...`);
+				Logger.debug(`Handling check for ${message.domains.length} domains…`);
 				return this.#handleCheckDomains(message.domains);
 			}
 
@@ -264,7 +264,7 @@ class BackgroundController {
 	 * @returns {Promise<void>} Resolves when all lists are updated and saved.
 	 */
 	async #refreshFilterLists() {
-		Logger.info('Starting scheduled background refresh of filter lists...');
+		Logger.info('Starting scheduled background refresh of filter lists…');
 		const syncData = await browser.storage.sync.get({ filterLists: [] });
 		const localData = await browser.storage.local.get({ filterListCache: {} });
 		let cacheUpdated = false;

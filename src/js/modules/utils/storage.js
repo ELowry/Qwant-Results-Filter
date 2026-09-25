@@ -122,7 +122,7 @@ class StorageUtilsController {
 	 * @returns {Promise<Array<string>>} The reconstructed array.
 	 */
 	async pullFromSync(key) {
-		Logger.debug(`Pulling ${key} from sync storage...`);
+		Logger.debug(`Pulling ${key} from sync storage…`);
 		const meta = await browser.storage.sync.get(`${key}_chunks`);
 		const totalChunks = meta[`${key}_chunks`] || 0;
 
@@ -141,7 +141,7 @@ class StorageUtilsController {
 		let parsedData = [];
 
 		if (isLegacyData) {
-			Logger.debug(`Detected legacy uncompressed data for ${key}. Migrating...`);
+			Logger.debug(`Detected legacy uncompressed data for ${key}. Migrating…`);
 			let combinedArray = [];
 
 			for (let i = 0; i < totalChunks; i++) {

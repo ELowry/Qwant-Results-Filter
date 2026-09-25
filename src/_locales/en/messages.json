@@ -150,11 +150,11 @@
 		"description": "Notice explaining that regular expression filter rules from uBlacklist lists are not supported."
 	},
 	"buttonAdding": {
-		"message": "Adding...",
+		"message": "Adding…",
 		"description": "Button text when a list is being added."
 	},
 	"buttonFetching": {
-		"message": "Fetching...",
+		"message": "Fetching…",
 		"description": "Button text when a list is being fetched from a remote URL."
 	},
 	"presetLearnMore": {
@@ -190,7 +190,7 @@
 		"description": "Category heading for Portuguese filter lists."
 	},
 	"categoryAiGeneratedContent": {
-		"message": "Ai Generated Content",
+		"message": "AI Generated Content",
 		"description": "Category heading for AI generated content filter lists."
 	},
 	"categoryCopycatSites": {
@@ -342,7 +342,7 @@
 		"description": "Accessibility label and tooltip for unblocking a domain button."
 	},
 	"counterWaiting": {
-		"message": "Waiting for search results...",
+		"message": "Waiting for search results…",
 		"description": "Tooltip for counter button while search results are loading."
 	},
 	"counterResultSingle": {

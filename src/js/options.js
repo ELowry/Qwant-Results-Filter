@@ -632,7 +632,7 @@ class OptionsController {
 	 */
 	async #addFilterList(url) {
 		try {
-			Logger.debug(`Fetching new filter list from ${url}...`);
+			Logger.debug(`Fetching new filter list from ${url}…`);
 			const response = await fetch(url, { signal: AbortSignal.timeout(10000) });
 
 			if (!response.ok) {

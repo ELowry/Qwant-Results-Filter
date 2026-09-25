@@ -31,7 +31,7 @@ class PresetFetcher {
 				process.exit(0);
 			}
 
-			console.log('[Qwant Filter] Fetching latest rulesets from uBlacklist...');
+			console.log('[Qwant Filter] Fetching latest rulesets from uBlacklist…');
 
 			const response = await fetch(this.#yamlUrl);
 

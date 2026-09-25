@@ -291,7 +291,7 @@ class AppController {
 	 * @returns {Promise<void>} Resolves when the DOM has been updated.
 	 */
 	async #processDOM(forceRecheck) {
-		Logger.debug(`Processing DOM (force: ${forceRecheck})...`);
+		Logger.debug(`Processing DOM (force: ${forceRecheck})…`);
 		const parsedData = this.#queryAndParseElements(forceRecheck);
 
 		if (parsedData.isEmpty) {
@@ -452,7 +452,7 @@ class AppController {
 		}
 
 		try {
-			Logger.debug(`Resolving ${hostnamesToCheck.size} unverified hostnames...`);
+			Logger.debug(`Resolving ${hostnamesToCheck.size} unverified hostnames…`);
 			const batchResults = await browser.runtime.sendMessage({
 				action: 'checkDomains',
 				domains: Array.from(hostnamesToCheck),
@@ -467,7 +467,7 @@ class AppController {
 			return true;
 		} catch (error) {
 			if (error.message && error.message.includes('Extension context invalidated')) {
-				Logger.warn('Extension context invalidated, cleaning up...');
+				Logger.warn('Extension context invalidated, cleaning up…');
 				this.#cleanup();
 				return false;
 			}
