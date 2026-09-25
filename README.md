@@ -1,4 +1,4 @@
-[![License: MIT](https://img.shields.io/badge/License-MIT-3d383b.svg)](LICENSE) [![Latest GitHub release](https://img.shields.io/github/v/release/ELowry/Qwant-Results-Filter?logo=GitHub&color=a4785e)](https://github.com/ELowry/Qwant-Results-Filter/releases/latest) [![Mozilla Add-on Users](https://img.shields.io/amo/users/qwant-results-filter?logo=firefox&color=e19085)](https://addons.mozilla.org/en-US/firefox/addon/qwant-results-filter/)
+[![License: MIT](https://img.shields.io/badge/License-MIT-3d383b.svg)](LICENSE) [![Latest GitHub release](https://img.shields.io/github/v/release/ELowry/Qwant-Results-Filter?logo=GitHub&color=a4785e)](https://github.com/ELowry/Qwant-Results-Filter/releases/latest) [![Mozilla Add-on Users](https://img.shields.io/amo/users/qwant-results-filter?logo=firefox&color=e19085)](https://addons.mozilla.org/en-US/firefox/addon/qwant-results-filter/) [![Translation status](https://hosted.weblate.org/widget/elowry/qwant-results-filter/svg-badge.svg)](https://hosted.weblate.org/engage/elowry/)
 
 # [![Qwant Results Filter](logo.png)](#)
 
@@ -51,6 +51,10 @@ For full details on how data and network requests are handled, please read the [
 ## Building from Source
 
 For developers who wish to build the extension from source, please refer to the dedicated [AMO README](AMO-README.md) file.
+
+## Translation Status
+
+[![Translation status](https://hosted.weblate.org/widget/elowry/qwant-results-filter/multi-auto.svg)](https://hosted.weblate.org/engage/elowry/)
 
 ## License
 
