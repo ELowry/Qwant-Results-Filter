@@ -118,6 +118,13 @@ export const RECOMMENDED_LISTS = {
 			description:
 				'Blocks AI generated spam, misleading advertisements, SEO bait, badware sites, and generally low-effort spam websites from your search engine results!',
 		},
+		{
+			name: 'William Johnason: DGA & Random Subdomain Spam Blocklist',
+			url: 'https://raw.githubusercontent.com/william-Johnason/ublacklist-dga-spam/refs/heads/main/uBlacklist.txt',
+			homepage: 'https://github.com/william-Johnason/ublacklist-dga-spam',
+			description:
+				'Blocks programmatic DGA spam subdomains, scrapers, and copycat networks targeting search results.',
+		},
 	],
 	'Specific Sites': [
 		{
