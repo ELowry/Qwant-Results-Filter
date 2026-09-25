@@ -279,7 +279,25 @@
 	"actionBlock": {
 		"message": "Bloquer"
 	},
+	"actionBlockAria": {
+		"message": "Bloquer $DOMAIN$",
+		"placeholders": {
+			"domain": {
+				"content": "$1",
+				"example": "exemple.fr"
+			}
+		}
+	},
 	"actionUnblock": {
 		"message": "Débloquer"
+	},
+	"actionUnblockAria": {
+		"message": "Débloquer $DOMAIN$",
+		"placeholders": {
+			"domain": {
+				"content": "$1",
+				"example": "example.fr"
+			}
+		}
 	}
 }
