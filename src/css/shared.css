@@ -168,7 +168,7 @@
 			transition: transform var(--motion-duration-300) var(--motion-ease);
 			box-sizing: border-box;
 			border-radius: var(--border-radius-full);
-			background-color: var(--color-icon-primary-on-inverse);
+			background-color: var(--color-icon-primary);
 			width: var(--size-200);
 			height: var(--size-200);
 			content: '';
