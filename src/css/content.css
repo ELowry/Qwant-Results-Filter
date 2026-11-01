@@ -7,7 +7,7 @@
 	&::backdrop {
 		opacity: 0;
 		transition: opacity var(--motion-duration-400) var(--motion-ease);
-		background: var(--color-background-blanket);
+		background: var(--color-blanket-base);
 	}
 
 	.qf-quick-settings-modal-content {
@@ -22,25 +22,25 @@
 		z-index: 1056;
 		transition: transform var(--motion-duration-400) var(--motion-ease);
 		box-shadow: var(--shadow-overlay);
-		background: var(--color-elevation-surface-overlay);
+		background: var(--color-surface-overlay);
 		padding: var(--spacing-300);
+		width: 480px;
+		max-width: 100vw;
 		overflow-y: auto;
 		color: var(--color-text-primary);
 
 		h3 {
-			font-weight: var(--text-heading-lg-bold-font-weight);
-			font-size: var(--text-heading-lg-bold-font-size);
-			line-height: var(--text-heading-lg-bold-font-line-height);
-			font-family: var(--text-heading-lg-bold-font-family);
-			letter-spacing: var(--text-heading-lg-bold-font-letter-spacing);
+			font-weight: var(--font-weight-bold);
+			font-size: var(--font-size-250);
+			line-height: var(--font-line-height-350);
+			font-family: var(--font-family-sans-heading);
 		}
 
 		h4 {
-			font-weight: var(--text-body-md-bold-font-weight);
-			font-size: var(--text-body-md-bold-font-size);
-			line-height: var(--text-body-md-bold-font-line-height);
-			font-family: var(--text-body-md-bold-font-family);
-			letter-spacing: var(--text-body-md-bold-font-letter-spacing);
+			font-weight: var(--font-weight-semibold);
+			font-size: var(--font-size-200);
+			line-height: var(--font-line-height-300);
+			font-family: var(--font-family-sans-heading);
 		}
 
 		hr {
@@ -54,10 +54,14 @@
 		header {
 			display: flex;
 			justify-content: space-between;
+			align-items: center;
 			gap: var(--spacing-500);
+			margin-bottom: var(--spacing-100);
+			border-bottom: 1px solid var(--card-border-color);
+			padding-bottom: var(--spacing-150);
 
 			#qf-qs-close {
-				color: var(--color-icon-brand-primary);
+				color: var(--color-icon-primary);
 			}
 		}
 
@@ -81,8 +85,8 @@
 					display: flex;
 					flex-direction: column;
 					gap: 2px;
-					border-radius: var(--button-radius-squared-medium);
-					background-color: oklch(from var(--color-border-secondary) l c h / 10%);
+					border-radius: var(--border-radius-150);
+					background-color: var(--color-fill-neutral-tertiary);
 					padding: var(--spacing-050);
 					padding-left: var(--spacing-100);
 					overflow: hidden;
@@ -103,8 +107,8 @@
 							justify-content: center;
 							align-items: center;
 							vertical-align: middle;
-							border-radius: var(--border-radius-full, 999px);
-							background-color: oklch(from var(--color-border-secondary) l c h / 25%);
+							border-radius: var(--border-radius-full);
+							background-color: var(--color-fill-neutral-secondary);
 							padding: 0 var(--spacing-050);
 							min-width: 1.5em;
 							font-weight: bold;
@@ -197,11 +201,11 @@ body.qf-reveal-mode .qf-hidden-result > *:not(.qf-block-button) {
 	opacity: 0;
 	z-index: 10;
 	transition: opacity 0.2s ease;
-	border-radius: var(--button-radius-squared-small);
-	background-color: var(--background-color);
+	border-radius: var(--border-radius-100);
+	background-color: var(--color-surface-base);
 	padding: var(--spacing-025) var(--spacing-050);
-	font-weight: bold;
-	font-size: 0.86rem;
+	font-weight: var(--font-weight-bold);
+	font-size: var(--font-size-150);
 
 	&:focus-visible {
 		opacity: 1;
@@ -213,12 +217,30 @@ body.qf-reveal-mode .qf-hidden-result > *:not(.qf-block-button) {
 }
 
 #qf-counter-button {
+	display: flex;
+	justify-content: center;
+	align-items: center;
+	transition: background-color var(--motion-ease) var(--motion-duration-200);
+	cursor: pointer;
 	box-sizing: border-box;
-	border: 1px solid var(--color-border-button-outline);
-	border-radius: var(--button-radius-squared-medium);
+	border: 1px solid var(--color-border-secondary);
+	border-radius: var(--border-radius-full);
+	background-color: var(--color-fill-neutral-tertiary);
 	width: var(--size-500);
 	height: var(--size-500);
-	color: var(--color-icon-brand-primary);
+	color: var(--color-text-primary);
+	font-weight: var(--font-weight-semibold);
+
+	&:hover {
+		background-color: var(--color-fill-neutral-tertiary-hovered);
+	}
+	&:active {
+		background-color: var(--color-fill-neutral-tertiary-pressed);
+	}
+	&:focus-visible {
+		outline: solid var(--spacing-025) var(--color-border-focus);
+		outline-offset: var(--spacing-025);
+	}
 }
 
 /* Temporarily hide unprocessed results to mask background resolution delay */

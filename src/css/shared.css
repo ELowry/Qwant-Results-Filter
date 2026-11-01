@@ -12,31 +12,34 @@
 		color var(--motion-ease) var(--motion-duration-200);
 	cursor: pointer;
 	border: 1px solid transparent;
-	border-radius: var(--button-radius-rounded-medium);
-	background-color: var(--color-background-neutral-tertiary);
+	border-radius: var(--border-radius-full);
+	background-color: var(--color-fill-neutral-tertiary);
+	color: var(--color-text-primary);
 
 	&:hover {
-		background-color: var(--color-background-neutral-tertiary-hovered);
+		background-color: var(--color-fill-neutral-tertiary-hovered);
 	}
 
 	&:focus-visible {
-		outline: solid var(--spacing-025) var(--color-border-focused);
+		outline: solid var(--spacing-025) var(--color-border-focus);
 		outline-offset: var(--spacing-025);
 	}
 }
 
 .qf-btn-standard {
-	border-color: var(--color-border-button-outline);
+	border-color: var(--color-border-secondary);
 	padding: calc(var(--spacing-100) + var(--spacing-025)) var(--spacing-200);
 	width: -webkit-fit-content;
 	width: -moz-fit-content;
 	width: fit-content;
 	min-height: var(--size-500);
+	font-weight: var(--font-weight-medium);
 	white-space: nowrap;
 }
 
 .qf-btn-icon-circular,
 .qf-btn-icon-rounded {
+	background-color: transparent;
 	padding: var(--spacing-050);
 	width: var(--size-400);
 	min-width: calc(var(--size-400) - var(--size-050));
@@ -49,47 +52,53 @@
 		pointer-events: none;
 	}
 }
+
 .qf-btn-icon-circular {
 	border-radius: var(--border-radius-full);
 }
 
 .qf-btn-icon-rounded {
-	border-radius: var(--button-radius-squared-small);
+	border-radius: var(--border-radius-100);
 }
 
 .qf-btn-primary {
-	border-color: var(--color-link-primary);
-	color: var(--color-link-primary);
+	border-color: transparent;
+	background-color: var(--color-fill-information);
+	color: var(--color-text-primary-on-inverse);
+
+	&:hover {
+		background-color: var(--color-fill-information-hovered);
+	}
 }
 
 .qf-btn-danger {
-	border-color: var(--color-background-danger-primary);
-	color: var(--color-background-danger-primary);
+	border-color: var(--color-border-danger);
+	color: var(--color-text-danger);
 }
 
 .qf-btn-danger-solid {
-	border-color: var(--color-background-danger-primary);
-	color: var(--color-background-danger-primary);
+	border-color: var(--color-fill-danger);
+	background-color: var(--color-fill-danger);
+	color: var(--color-text-primary-on-inverse);
 
 	&:hover {
-		border-color: var(--color-background-danger-primary);
-		background-color: var(--color-background-danger-primary);
-		color: var(--color-background);
+		border-color: var(--color-fill-danger-hovered);
+		background-color: var(--color-fill-danger-hovered);
 	}
 }
 
 .qf-btn-purple {
-	border-color: var(--color-background-accent-purple-primary);
-	color: var(--color-background-accent-purple-primary);
+	border-color: var(--color-border-decorative-purple);
+	color: var(--color-text-decorative-purple);
 }
 
 .qf-btn-purple-solid {
-	border-color: var(--color-border-accent-purple);
-	background-color: var(--color-background-accent-purple-primary);
-	color: white;
+	border-color: var(--color-fill-decorative-purple);
+	background-color: var(--color-fill-decorative-purple);
+	color: var(--color-text-primary-on-inverse);
 
 	&:hover {
-		background-color: var(--color-background-accent-purple-primary-hovered);
+		background-color: var(--color-fill-decorative-purple-hovered);
 	}
 }
 
@@ -113,20 +122,18 @@
 	display: flex;
 	align-items: center;
 	cursor: pointer;
-	font-weight: var(--text-body-md-font-weight, 500);
-	font-size: var(--text-body-md-font-size, 1rem);
-	line-height: var(--text-body-md-font-line-height, 1.5);
-	font-family: var(--text-body-md-font-family, inherit);
-	letter-spacing: var(--text-body-md-font-letter-spacing, normal);
+	font-weight: var(--font-weight-medium);
+	font-size: var(--font-size-175);
+	line-height: var(--font-line-height-250);
 }
 
 .qf-toggle-switch {
-	--toggle-switch-container-size: var(--size-250, 24px);
+	--toggle-switch-container-size: var(--size-300);
 	display: inline-flex;
 	position: relative;
 	align-self: center;
 	cursor: pointer;
-	margin-left: var(--spacing-200, 16px);
+	margin-left: var(--spacing-200);
 	height: var(--toggle-switch-container-size);
 
 	input {
@@ -144,39 +151,47 @@
 	.qf-toggle-slider {
 		position: relative;
 		transition:
-			background-color var(--motion-duration-200, 0.2s),
-			border var(--motion-duration-200, 0.2s);
+			background-color var(--motion-duration-300) var(--motion-ease),
+			border var(--motion-duration-300) var(--motion-ease);
 		cursor: pointer;
 		box-sizing: border-box;
 		border: 1px solid var(--color-border-primary);
-		border-radius: var(--border-radius-full, 9999px);
-		background-color: var(--color-background-input);
-		width: var(--size-500, 48px);
+		border-radius: var(--border-radius-full);
+		background-color: var(--color-fill-input);
+		width: var(--size-600);
 		height: 100%;
 
 		&::before {
 			position: absolute;
-			top: calc(50% - var(--spacing-100, 8px));
-			left: 1px;
-			transition:
-				transform var(--motion-duration-200, 0.2s),
-				background-color var(--motion-duration-200, 0.2s);
+			top: calc(50% - var(--spacing-100));
+			left: var(--spacing-025);
+			transition: transform var(--motion-duration-300) var(--motion-ease);
 			box-sizing: border-box;
-			border-radius: var(--border-radius-full, 9999px);
-			background-color: var(--color-icon-primary);
-			width: var(--size-200, 16px);
-			height: var(--size-200, 16px);
+			border-radius: var(--border-radius-full);
+			background-color: var(--color-icon-primary-on-inverse);
+			width: var(--size-200);
+			height: var(--size-200);
 			content: '';
 		}
 	}
 
+	input:hover + .qf-toggle-slider {
+		background-color: var(--color-fill-input-hovered);
+	}
+
 	input:checked + .qf-toggle-slider {
 		border-color: transparent;
-		background-color: var(--color-background-checked);
+		background-color: var(--color-fill-checked);
 
 		&::before {
-			transform: translateX(calc(var(--size-500, 48px) - var(--size-200, 16px) - 4px));
-			background-color: var(--color-background-input);
+			transform: translateX(
+				calc(var(--size-600) - var(--size-200) - var(--spacing-050) - 2px)
+			);
+			background-color: var(--color-icon-primary-on-inverse);
 		}
+	}
+
+	input:checked:hover + .qf-toggle-slider {
+		background-color: var(--color-fill-checked-hovered);
 	}
 }
