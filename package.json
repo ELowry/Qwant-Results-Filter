@@ -23,12 +23,12 @@
 	"devDependencies": {
 		"@eslint/js": "^10.0.1",
 		"@trivago/prettier-plugin-sort-imports": "^6.0.2",
-		"eslint": "^10.14.0",
+		"eslint": "^10.15.0",
 		"eslint-config-prettier": "^10.1.8",
-		"eslint-plugin-jsdoc": "^65.4.2",
-		"globals": "^17.13.0",
+		"eslint-plugin-jsdoc": "^65.5.1",
+		"globals": "^17.14.0",
 		"js-yaml": "^5.5.0",
-		"prettier": "^3.9.10",
+		"prettier": "^3.10.1",
 		"prettier-plugin-css-order": "^2.2.0",
 		"web-ext": "^10.8.0"
 	}
